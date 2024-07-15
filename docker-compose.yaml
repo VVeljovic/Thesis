@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres
+    container_name: postgres_container
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: THESISDB
+      POSTGRES_USER: vveljko
+      POSTGRES_PASSWORD: vveljkopass
+    networks:
+      - thesis
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_container
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: vveljko@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: vveljkopass
+    networks:
+      - thesis
+
+networks:
+  thesis:
+    name: thesis
