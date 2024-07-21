@@ -6,9 +6,10 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: THESISDB
       POSTGRES_USER: vveljko
       POSTGRES_PASSWORD: vveljkopass
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - thesis
   pgadmin:
@@ -22,7 +23,25 @@ services:
       PGADMIN_DEFAULT_PASSWORD: vveljkopass
     networks:
       - thesis
-
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak_container
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: db
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: keycloakpass
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: adminpass
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    command:
+      - start-dev
+    networks:
+      - thesis
 networks:
   thesis:
     name: thesis
