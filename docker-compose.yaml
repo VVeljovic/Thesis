@@ -27,17 +27,10 @@ services:
     image: quay.io/keycloak/keycloak:latest
     container_name: keycloak_container
     environment:
-      DB_VENDOR: POSTGRES
-      DB_ADDR: db
-      DB_DATABASE: keycloak
-      DB_USER: keycloak
-      DB_PASSWORD: keycloakpass
       KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: adminpass
+      KEYCLOAK_ADMIN_PASSWORD: admin
     ports:
-      - "8080:8080"
-    depends_on:
-      - db
+      - "9090:8080"
     command:
       - start-dev
     networks:
