@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   db:
     image: postgres
@@ -12,6 +14,7 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - thesis
+
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin_container
@@ -23,18 +26,23 @@ services:
       PGADMIN_DEFAULT_PASSWORD: vveljkopass
     networks:
       - thesis
+
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     container_name: keycloak_container
+    volumes:
+      - ./imports:/opt/keycloak/data/import
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
     ports:
       - "9090:8080"
     command:
-      - start-dev
+      - "start-dev"
+      - "--import-realm"
     networks:
       - thesis
+
 networks:
   thesis:
     name: thesis
