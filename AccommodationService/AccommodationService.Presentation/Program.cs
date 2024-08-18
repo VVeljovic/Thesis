@@ -1,4 +1,5 @@
 using AccommodationService.Application.Interfaces;
+using AccommodationService.Infrastructure.InversionOfControl;
 using AccommodationService.Infrastructure.MongoDb;
 using AccommodationService.Infrastructure.Services;
 
@@ -12,8 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var mongoDbSettings = builder.Configuration.GetSection("MongoDbSettings").Get<MongoDbSettings>();
 builder.Services.AddSingleton(mongoDbSettings);
-builder.Services.AddSingleton<MongoDbContext>();
-builder.Services.AddScoped<IAccommodationService, AccommodationServiceImpl>();
+builder.Services.AddInfrastructure();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

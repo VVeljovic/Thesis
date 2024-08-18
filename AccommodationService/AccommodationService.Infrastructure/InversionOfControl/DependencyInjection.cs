@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using AccommodationService.Application.Interfaces;
+using AccommodationService.Infrastructure.MongoDb;
+using AccommodationService.Infrastructure.Services;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +13,14 @@ namespace AccommodationService.Infrastructure.InversionOfControl
 {
     public static class DependencyInjection
     {
-        //public static IServiceCollection AddInfrastructure(this IServiceCollection services)
-        //{
-        //    var assembly = typeof(DependencyInjection).Assembly;
-           
-        //}
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+        {
+            services.AddScoped<IAccommodationService, AccommodationServiceImpl>();
+
+            services.AddSingleton<MongoDbContext>();
+            
+            return services;
+
+        }
     }
 }

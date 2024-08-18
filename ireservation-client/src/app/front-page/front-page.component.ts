@@ -20,5 +20,7 @@ constructor (private accommodationService : AccommodationService)
     this.accommodationList = response; 
     console.log(response);
   })
+  this.accommodationService.getMyLocation().subscribe((response)=>console.log(response));
+  this.accommodationService.getCoordinates("Belgrade").subscribe((response)=>console.log(response));
 }
 }

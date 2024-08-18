@@ -16,6 +16,10 @@ namespace AccommodationService.Application.Interfaces
 
         public void DeleteAccommodation(string id);
 
-        public AccommodationDto GetAccommodation(string id);
+        public Task<AccommodationDto> GetAccommodationByIdAsync(string id);
+
+        public Task<IEnumerable<AccommodationDto>> GetAccommodationsAsync(double longitude, double latitude, int pageSize, int pageNumber);
+
+        public Task<IEnumerable<AccommodationDto>> GetMyAccommodationsAsync(string userId);
     }
 }

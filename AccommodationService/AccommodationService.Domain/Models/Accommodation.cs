@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Driver.GeoJsonObjectModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,8 @@ namespace AccommodationService.Domain.Models
         public List<String> Photos { get; set; }
         public string UserId { get; set; }
 
-        public Amenity Amenity { get; set; }   
+        public Amenity Amenity { get; set; } 
+        
+        public GeoJsonPoint<GeoJson2DGeographicCoordinates> Location { get; set; }
     }
 }

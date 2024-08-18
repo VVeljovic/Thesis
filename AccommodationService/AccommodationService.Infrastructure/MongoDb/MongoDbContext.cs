@@ -10,15 +10,17 @@ namespace AccommodationService.Infrastructure.MongoDb
     public class MongoDbContext
     {
         private  IMongoDatabase _database;
+        public IMongoCollection<Accommodation> Accommodations => _database.GetCollection<Accommodation>("Accommodations");
+        public IMongoCollection<Amenity> Amenities => _database.GetCollection<Amenity>("Amenity");
         public MongoDbContext(MongoDbSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
             _database = client.GetDatabase(settings.DatabaseName);
-           
-          
+            CreateCollectionsAsync();
+
         }
 
-        private void CreateCollections()
+        private async void CreateCollectionsAsync()
         {
             
             var collectionNames = _database.ListCollectionNames().ToList();
@@ -26,6 +28,8 @@ namespace AccommodationService.Infrastructure.MongoDb
             if (!collectionNames.Contains("Accommodations"))
             {
                 _database.CreateCollection("Accommodations");
+                var indexKeyDefinition = Builders<Accommodation>.IndexKeys.Geo2DSphere(accommodation => accommodation.Location);
+                await Accommodations.Indexes.CreateOneAsync(new CreateIndexModel<Accommodation>(indexKeyDefinition));
             }
 
             if (!collectionNames.Contains("Amenities"))
@@ -46,8 +50,7 @@ namespace AccommodationService.Infrastructure.MongoDb
             return _database.GetCollection<T>(name);
         }
 
-        public IMongoCollection<Accommodation> Accommodations => _database.GetCollection<Accommodation>("Accommodations");
-        public IMongoCollection<Amenity> Amenities => _database.GetCollection<Amenity>("Amenity");
+       
 
     }
 }
