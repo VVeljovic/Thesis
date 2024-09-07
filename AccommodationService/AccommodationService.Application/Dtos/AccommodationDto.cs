@@ -26,7 +26,6 @@ namespace AccommodationService.Application.Dtos
         {
             return new Accommodation
             {
-                Id = Guid.NewGuid().ToString(),
                 PropertyName = acommodationDto.PropertyName,
                 Description = acommodationDto.Description,
                 Address = acommodationDto.Address,

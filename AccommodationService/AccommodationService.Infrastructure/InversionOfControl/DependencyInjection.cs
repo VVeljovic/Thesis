@@ -12,13 +12,15 @@ using System.Threading.Tasks;
 namespace AccommodationService.Infrastructure.InversionOfControl
 {
     public static class DependencyInjection
+    
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             services.AddScoped<IAccommodationService, AccommodationServiceImpl>();
+            services.AddScoped<IReviewService, ReviewServiceImpl>();
+            services.AddSingleton<AccommodationContext>();
+            services.AddSingleton<ReviewContext>();
 
-            services.AddSingleton<MongoDbContext>();
-            
             return services;
 
         }

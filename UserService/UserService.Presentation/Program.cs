@@ -1,15 +1,22 @@
+using Keycloak.AuthServices.Authentication;
+using Microsoft.Extensions.Options;
+using UserService.Infrastructure.DependencyInjection;
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+builder.Services.AddKeycloakWebApiAuthentication(builder.Configuration, cfg => {
+    cfg.Audience = "public-client";
+    cfg.RequireHttpsMetadata = false;
+});
+builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddControllers();
+
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

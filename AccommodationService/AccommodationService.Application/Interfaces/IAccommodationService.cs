@@ -21,5 +21,9 @@ namespace AccommodationService.Application.Interfaces
         public Task<IEnumerable<AccommodationDto>> GetAccommodationsAsync(double longitude, double latitude, int pageSize, int pageNumber);
 
         public Task<IEnumerable<AccommodationDto>> GetMyAccommodationsAsync(string userId);
+
+        public Task<ReviewDto> CreateReview(ReviewDto reviewDto);
+
+        public Task ExecuteAsync(CancellationToken stoppingToken);
     }
 }
