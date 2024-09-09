@@ -1,0 +1,6 @@
+@TransactionService.Presentation_HostAddress = http://localhost:5152
+
+GET {{TransactionService.Presentation_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

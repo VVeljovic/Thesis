@@ -8,16 +8,27 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-
+using Confluent.Kafka;
+using AccommodationService.Application.Interfaces.Kafka;
+using AccommodationService.Infrastructure.Services.Kafka;
 namespace AccommodationService.Infrastructure.InversionOfControl
 {
-    public static class DependencyInjection
+    public static class InfrastructureServiceCollectionExtensions
     
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             services.AddScoped<IAccommodationService, AccommodationServiceImpl>();
             services.AddScoped<IReviewService, ReviewServiceImpl>();
+            services.AddSingleton<IProducer<Null, string>>(provider =>
+            {
+                var producerConfig = new ProducerConfig
+                {
+                    BootstrapServers = "localhost:29092",
+                };
+                return new ProducerBuilder<Null, string>(producerConfig).Build();
+            });
+            services.AddScoped<IProducer, ProducerImpl>();
             services.AddSingleton<AccommodationContext>();
             services.AddSingleton<ReviewContext>();
 

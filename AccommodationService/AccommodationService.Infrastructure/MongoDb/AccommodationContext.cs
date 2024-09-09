@@ -57,9 +57,10 @@ namespace AccommodationService.Infrastructure.MongoDb
         {
             var objectId = new ObjectId(id);
             var filter = Builders<Accommodation>.Filter.Eq(accommodation => accommodation.Id, objectId);
-            var order = await Accommodations.Find(filter).FirstOrDefaultAsync();
-            
-            return AccommodationDto.MapAccommodationToDto(order);
+            var accommodation = await Accommodations.Find(filter).FirstOrDefaultAsync();
+            if(accommodation!=null)
+            return AccommodationDto.MapAccommodationToDto(accommodation);
+            return null;
         }
 
         public async Task<IEnumerable<AccommodationDto>> GetAccommodationsAsync(double longitude, double latitude, int pageSize, int pageNumber)

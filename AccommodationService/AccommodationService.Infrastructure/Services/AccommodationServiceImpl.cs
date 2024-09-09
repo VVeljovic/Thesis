@@ -11,6 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Confluent.Kafka;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
+using AccommodationService.Application.Interfaces.Kafka;
 
 namespace AccommodationService.Infrastructure.Services
 {
@@ -18,20 +20,21 @@ namespace AccommodationService.Infrastructure.Services
     {
         private readonly AccommodationContext _dbContext;
 
+        private readonly IProducer _producer;
+
         private readonly IConsumer<Ignore, string> _consumer;
-
-
-        public AccommodationServiceImpl(AccommodationContext dbContext)
+        public AccommodationServiceImpl(AccommodationContext dbContext, IProducer producer)
         {
             _dbContext = dbContext;
+            _producer = producer;
             var consumerConfig = new ConsumerConfig()
             {
                 BootstrapServers = "localhost:29092",
-                GroupId = "Inventory",
-                AutoOffsetReset = AutoOffsetReset.Earliest
+                GroupId = "Bookingg",
+                AutoOffsetReset = AutoOffsetReset.Latest  
             };
             _consumer = new ConsumerBuilder<Ignore, string>(consumerConfig).Build();
-            _consumer.Subscribe("topiccc");
+            _consumer.Subscribe("reservation_request");
         }
 
         public Task<ReviewDto> CreateReview(ReviewDto reviewDto)
@@ -76,33 +79,49 @@ namespace AccommodationService.Infrastructure.Services
 
         public async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-           
-
-            while (!stoppingToken.IsCancellationRequested)
+            await Task.Run(async () =>
             {
-                ProcessKafkaMessage(stoppingToken);
+                try
+                {
+                    while (!stoppingToken.IsCancellationRequested)
+                    {
+                        var consumeResult = _consumer.Consume(stoppingToken);
+                        var message = consumeResult.Message.Value;
 
-                Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
-            }
+                        var topic = consumeResult.Topic;
+                        Console.WriteLine("sa topica " + topic);
+                        Console.WriteLine($"Primljena poruka: {message}");
+                        await ProcessReservationRequestMessage(message);
 
-            _consumer.Close();
+
+                    }
+                }
+                catch (OperationCanceledException)
+                {
+                    
+                    Console.WriteLine("Operacija otkazana.");
+                }
+                catch (Exception ex)
+                {
+                    
+                    Console.WriteLine($"Greška: {ex.Message}");
+                }
+            });
         }
 
-        public void ProcessKafkaMessage(CancellationToken stoppingToken)
+        public async Task ProcessReservationRequestMessage(string message)
         {
-            try
+            ReservationRequestDto reservationRequestDto = JsonSerializer.Deserialize<ReservationRequestDto>(message);
+            var accommodation = await _dbContext.GetAccommodationByIdAsync(reservationRequestDto.AccommodationId);
+            if(accommodation!=null && reservationRequestDto.DateFrom >= accommodation.AvailableFrom && reservationRequestDto.DateTo <= accommodation.AvailableTo)
             {
-                var consumeResult = _consumer.Consume(stoppingToken);
-
-                var message = consumeResult.Message.Value;
-                Console.WriteLine(message);
-                
+                await _producer.ProduceAsync("reservation_success", message);
             }
-            catch (Exception ex)
+            else
             {
-               Console.WriteLine($"Error processing Kafka message: {ex.Message}");
+                await _producer.ProduceAsync("reservation_failed", "message");
             }
-        
+           
         }
     }
 }
