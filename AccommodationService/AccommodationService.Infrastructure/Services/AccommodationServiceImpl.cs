@@ -18,12 +18,15 @@ namespace AccommodationService.Infrastructure.Services
     {
         private readonly AccommodationContext _dbContext;
 
-        IRabbitMQProducer<ReservationRequestDto> _rabbitMQPublisher;
+        IRabbitMQProducer<ReservationRequestDto> _rabbitMQProducer;
 
-        public AccommodationServiceImpl(AccommodationContext dbContext, IRabbitMQProducer<ReservationRequestDto> rabbitMQPublisher)
+        IRabbitMQProducer<string> _rabbitMQProducer1;
+
+        public AccommodationServiceImpl(AccommodationContext dbContext, IRabbitMQProducer<ReservationRequestDto> rabbitMQProducer, IRabbitMQProducer<string>rabbitMQProducer1)
         {
             _dbContext = dbContext;
-            _rabbitMQPublisher = rabbitMQPublisher;
+            _rabbitMQProducer = rabbitMQProducer;
+            _rabbitMQProducer1 = rabbitMQProducer1;
         }
 
         public Task<ReviewDto> CreateReview(ReviewDto reviewDto)
@@ -51,7 +54,7 @@ namespace AccommodationService.Infrastructure.Services
         {
             return await _dbContext.GetMyAccommodationsAsync(userId);
         }
-        public Task HandleMessageAsync<T>(T message, string queueName)
+        public async Task<Task> HandleMessageAsync<T>(T message, string queueName)
         {
             var messageJson = JsonSerializer.Serialize(message);
 
@@ -60,7 +63,15 @@ namespace AccommodationService.Infrastructure.Services
             Console.WriteLine(messageJson);
             if (queueName == "transaction_request" && message is ReservationRequestDto reservationRequest)
             {
-                _rabbitMQPublisher.PublishMessageAsync(reservationRequest, "reservation_request");
+                 var accommodation = await GetAccommodationByIdAsync(reservationRequest.AccommodationId);
+                 if(accommodation == null)
+                 {
+                    await _rabbitMQProducer1.PublishMessageAsync("Accommodation with this id does not exist.","transaction_failed");
+                 }
+                 else
+                 {
+                await _rabbitMQProducer.PublishMessageAsync(reservationRequest, "reservation_request");
+                 }
             }
             return Task.CompletedTask;
         }

@@ -16,6 +16,7 @@ var mongoDbSettings = builder.Configuration.GetSection("MongoDbSettings").Get<Mo
 builder.Services.AddSingleton(mongoDbSettings);
 builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();
+builder.Services.AddHostedService<RabbitMQConsumerHostedService<string>>();
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {

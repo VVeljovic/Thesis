@@ -29,5 +29,15 @@ namespace TransactionService.Infrastructure.Services
             await _transactionDbContext.CreateTransactionAsync(transaction);
             await _rabbitMQPublisher.PublishMessageAsync(createTransactionCommand, RabbitMQQueues.ReservationRequest);
         }
+
+        public Task HandleMessageAsync<T>(T message, string queueName)
+        {
+            var messageJson = JsonSerializer.Serialize(message);
+            Console.WriteLine($"Received message from queue: {queueName}");
+            Console.WriteLine("Message content:");
+            Console.WriteLine(messageJson);
+
+            return Task.CompletedTask;
+        }
     }
 }

@@ -24,6 +24,6 @@ namespace AccommodationService.Application.Interfaces
 
         public Task<ReviewDto> CreateReview(ReviewDto reviewDto);
 
-        public Task HandleMessageAsync<T>(T message, string queueName);
+        public Task<Task> HandleMessageAsync<T>(T message, string queueName);
     }
 }
