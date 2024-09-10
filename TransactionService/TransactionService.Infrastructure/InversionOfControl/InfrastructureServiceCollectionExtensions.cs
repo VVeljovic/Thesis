@@ -1,5 +1,5 @@
-﻿using Confluent.Kafka;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,17 +16,28 @@ namespace TransactionService.Infrastructure.InversionOfControl
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
         {
             {
-                services.AddSingleton<IProducer<Null, string>>(provider =>
-                {
-                    var producerConfig = new ProducerConfig
-                    {
-                        BootstrapServers = "localhost:29092",
-                    };
-                    return new ProducerBuilder<Null, string>(producerConfig).Build();
-                });
-                services.AddScoped<IProducer, ProducerImpl>();
                 services.AddScoped<ITransactionService, TransactionServiceImpl>();
                 services.AddSingleton<TransactionDbContext>();
+                services.AddSingleton(provider =>
+                {
+                    return new ConnectionFactory
+                    {
+                        HostName = "localhost",
+                        Port = 5672
+                    };
+                });
+                services.AddSingleton(provider =>
+                {
+                    var connectionFactory = provider.GetRequiredService<ConnectionFactory>();
+                    return connectionFactory.CreateConnection();
+                });
+
+                services.AddSingleton(provider =>
+                {
+                    var connection = provider.GetRequiredService<IConnection>();
+                    return connection.CreateModel();
+                });
+                services.AddScoped(typeof(IRabbitMQPublisher<>), typeof(RabbitMQPublisher<>));
                 return services;
             }
         }

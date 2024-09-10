@@ -24,8 +24,6 @@ namespace AccommodationService.Application.Interfaces
 
         public Task<ReviewDto> CreateReview(ReviewDto reviewDto);
 
-        public Task ExecuteAsync(CancellationToken stoppingToken);
-
-        public Task ProcessReservationRequestMessage(string message);
+        Task HandleMessageAsync<T>(T message);
     }
 }

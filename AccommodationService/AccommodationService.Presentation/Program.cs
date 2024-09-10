@@ -1,8 +1,8 @@
+using AccommodationService.Application.Dtos;
 using AccommodationService.Application.Interfaces;
 using AccommodationService.Infrastructure.InversionOfControl;
 using AccommodationService.Infrastructure.MongoDb;
 using AccommodationService.Infrastructure.Services;
-using AccommodationService.Presentation.Kafka;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +15,7 @@ builder.Services.AddSwaggerGen();
 var mongoDbSettings = builder.Configuration.GetSection("MongoDbSettings").Get<MongoDbSettings>();
 builder.Services.AddSingleton(mongoDbSettings);
 builder.Services.AddInfrastructure();
-builder.Services.AddHostedService<KafkaConsumerHosterService>();
+builder.Services.AddHostedService<RabbitMQConsumerHostedService<ReservationRequestDto>>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -24,7 +24,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

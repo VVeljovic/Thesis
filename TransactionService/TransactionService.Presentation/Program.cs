@@ -3,7 +3,6 @@ using TransactionService.Infrastructure.Services;
 using TransactionService.Application.InversionOfControl;
 using TransactionService.Infrastructure.InversionOfControl;
 using TransactionService.Infrastructure.MongoDb;
-using TransactionService.Presentation.Kafka;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,9 +16,7 @@ var mongoDbSettings = builder.Configuration.GetSection("MongoDbSettings").Get<Mo
 builder.Services.AddSingleton(mongoDbSettings);
 builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();
-builder.Services.AddHostedService<KafkaConsumerHosterService>();
 var app = builder.Build();
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

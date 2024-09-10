@@ -10,7 +10,5 @@ namespace TransactionService.Application.Interfaces
     public interface ITransactionService
     {
         public Task CreateTransaction(CreateTransactionCommand createTransactionCommand);
-
-        public Task ReadMessageFromTopic(CancellationToken stoppingToken);
     }
 }
