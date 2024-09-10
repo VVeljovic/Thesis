@@ -5,10 +5,10 @@ using System.Text.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-public class RabbitMQPublisher<T> : IRabbitMQPublisher<T>
+public class RabbitMQProducer<T> : IRabbitMQProducer<T>
 {
     private readonly IModel _channel;
-    public RabbitMQPublisher(IModel channel)
+    public RabbitMQProducer(IModel channel)
     {
         _channel = channel;   
     }

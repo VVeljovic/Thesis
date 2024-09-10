@@ -7,7 +7,7 @@ using RabbitMQ.Client.Events;
 public class RabbitMQConsumer<T> : IRabbitMQConsumer<T>
 {
     private readonly IModel _channel;
-    private readonly string _queueName = "transaction_request";
+    private readonly string _queueName = "reservation_request";
     public RabbitMQConsumer(IModel channel)
     {
         _channel = channel;

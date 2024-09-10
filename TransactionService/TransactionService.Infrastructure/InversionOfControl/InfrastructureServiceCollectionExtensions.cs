@@ -37,7 +37,7 @@ namespace TransactionService.Infrastructure.InversionOfControl
                     var connection = provider.GetRequiredService<IConnection>();
                     return connection.CreateModel();
                 });
-                services.AddScoped(typeof(IRabbitMQPublisher<>), typeof(RabbitMQPublisher<>));
+                services.AddScoped(typeof(IRabbitMQProducer<>), typeof(RabbitMQProducer<>));
                 return services;
             }
         }

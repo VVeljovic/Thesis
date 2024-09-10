@@ -1,8 +1,8 @@
 public class RabbitMQQueues
 {
-    public const string ReservationRequest = "reservation_request";
+    public const string ReservationRequest = "transaction_request";
 
-    public const string ReservationSuccess = "reservation_success";
+    public const string ReservationSuccess = "transaction_success";
 
-    public const string ReservationFailed = "reservation_failed";
+    public const string ReservationFailed = "transaction_failed";
 }

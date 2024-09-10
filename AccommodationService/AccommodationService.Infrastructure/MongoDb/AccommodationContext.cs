@@ -39,8 +39,6 @@ namespace AccommodationService.Infrastructure.MongoDb
             {
                 _database.CreateCollection("Amenities");
             }
-
-          
         }
 
         public async Task InsertAccommodationAsync(Accommodation accommodation)

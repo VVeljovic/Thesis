@@ -18,10 +18,12 @@ namespace AccommodationService.Infrastructure.Services
     {
         private readonly AccommodationContext _dbContext;
 
-        private readonly IRabbitMQConsumer<ReservationRequestDto> _consumer;
-        public AccommodationServiceImpl(AccommodationContext dbContext)
+        IRabbitMQProducer<ReservationRequestDto> _rabbitMQPublisher;
+
+        public AccommodationServiceImpl(AccommodationContext dbContext, IRabbitMQProducer<ReservationRequestDto> rabbitMQPublisher)
         {
             _dbContext = dbContext;
+            _rabbitMQPublisher = rabbitMQPublisher;
         }
 
         public Task<ReviewDto> CreateReview(ReviewDto reviewDto)
@@ -49,9 +51,6 @@ namespace AccommodationService.Infrastructure.Services
         {
             return await _dbContext.GetMyAccommodationsAsync(userId);
         }
-
-
-
         public Task HandleMessageAsync<T>(T message, string queueName)
         {
             var messageJson = JsonSerializer.Serialize(message);
@@ -59,10 +58,12 @@ namespace AccommodationService.Infrastructure.Services
             Console.WriteLine($"Received message from queue: {queueName}");
             Console.WriteLine("Message content:");
             Console.WriteLine(messageJson);
-
+            if (queueName == "transaction_request" && message is ReservationRequestDto reservationRequest)
+            {
+                _rabbitMQPublisher.PublishMessageAsync(reservationRequest, "reservation_request");
+            }
             return Task.CompletedTask;
         }
-
         public async Task<AccommodationDto> InsertAccommodationAsync(AccommodationDto accommodationDto)
         {
             Accommodation accommodation = AccommodationDto.MapDtoToAccommodation(accommodationDto);

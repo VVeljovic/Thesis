@@ -17,8 +17,8 @@ namespace TransactionService.Infrastructure.Services
     {
         private readonly TransactionDbContext _transactionDbContext;
 
-        IRabbitMQPublisher<CreateTransactionCommand> _rabbitMQPublisher;
-        public TransactionServiceImpl(TransactionDbContext transactionDbContext, IRabbitMQPublisher<CreateTransactionCommand> rabbitMQPublisher)
+        IRabbitMQProducer<CreateTransactionCommand> _rabbitMQPublisher;
+        public TransactionServiceImpl(TransactionDbContext transactionDbContext, IRabbitMQProducer<CreateTransactionCommand> rabbitMQPublisher)
         {  
             _transactionDbContext = transactionDbContext;
             _rabbitMQPublisher = rabbitMQPublisher;
