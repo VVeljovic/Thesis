@@ -1,0 +1,117 @@
+:root {
+    --color: rgb(255, 90, 95); 
+    --color: rgb(22, 192, 192); 
+    
+}
+body {
+    background-color: rgb(227,226,227);
+}
+.wrapper {
+    display: flex;
+    padding: 3rem;
+    gap: 2px 2px;
+}
+.side-bar {
+    width: 40%;
+    background-color: white;
+    padding: 2rem;
+    /* padding: 2rem;
+    border: 3px solid #0197ee25;
+    padding: 10px;          
+    border-radius: 8px;     */
+}
+.main-container {   
+    width: 60%;
+    padding: 4rem;
+    background-color: rgb(255, 255, 255);
+    justify-content: center;
+}
+h1, h2 {
+    font-size: 40px;
+    font-weight: bolder;
+    font-family: 'Bree Serif', serif;
+    
+}
+p {
+    font-family: 'Roboto', serif;
+    color: rgb(121, 121, 121);
+    font-size: 16px;
+    line-height: 23px;
+}
+.pinktext {
+    color: var(--color);  
+    font-size: 21px;   
+}
+.pinkbutton, .graybutton {
+    padding: 15px 27px 15px 27px;
+    color: white!important;
+    border-radius: 25px;
+    font-size: 18px;
+    text-decoration: none;
+    font-weight: lighter;
+    font-family: 'Roboto Slab', serif;
+}
+.pinkbutton {
+    background-color: var(--color);
+}
+.pinkbutton:hover {
+    background-color: lightgray;
+    color: var(--color)!important;
+}
+.graybutton {
+    background-color: rgb(96, 96, 97);
+    padding: 15px 30px 15px 30px;
+}
+.graybutton:hover {
+    background-color: lightgray;
+    color: black!important;
+}
+.bold {
+    color: rgb(96, 96, 97);
+    font-weight: bold;
+    font-size: 18px;
+}
+.image-container {
+    display: flex;
+    overflow-x: scroll;
+    gap: 5px 5px;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    
+}
+#image-container-wrap {
+    flex-wrap: wrap-reverse;
+    overflow-x: auto;
+    gap: 50px 50px;
+    justify-content: center;
+    
+}
+.image-container img {
+    width: 350px;
+    height: 250px;
+    object-fit: cover!important;
+     transition: opacity;
+     transition-duration: 1s!important;
+}
+.image-container img:hover {
+    opacity: 0.5;
+}
+.fas, .fa {
+    margin-right: 4px;
+    margin-left: 4px;
+}
+.fas .fa-star {
+    color: var(--color);
+    font-size: 18px;
+    margin: 3px;
+}
+.fas .fa-star:hover {
+    color: rgb(96, 96, 97);
+}
+hr {
+    color: lightgray;
+    
+}
+.greeting {
+text-align: center;
+}
