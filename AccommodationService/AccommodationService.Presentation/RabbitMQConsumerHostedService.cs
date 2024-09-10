@@ -1,22 +1,19 @@
-using AccommodationService.Application.Dtos;
 using AccommodationService.Application.Interfaces;
 
 public class RabbitMQConsumerHostedService<T> : IHostedService
 {
-    private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly IRabbitMQConsumer<T> _consumer;
+    private readonly IServiceProvider _serviceProvider;
 
-    public RabbitMQConsumerHostedService(IServiceScopeFactory serviceScopeFactory)
+    public RabbitMQConsumerHostedService(IRabbitMQConsumer<T> consumer, IServiceProvider serviceProvider)
     {
-        _serviceScopeFactory = serviceScopeFactory;
+        _consumer = consumer;
+        _serviceProvider = serviceProvider;
     }
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        using (var scope = _serviceScopeFactory.CreateScope())
-        {
-            var consumer = scope.ServiceProvider.GetRequiredService<IRabbitMQConsumer<T>>();
-            consumer.StartConsuming(HandleMessage);
-        }
+        _consumer.StartConsuming(HandleMessage);
         return Task.CompletedTask;
     }
 
@@ -25,12 +22,12 @@ public class RabbitMQConsumerHostedService<T> : IHostedService
         return Task.CompletedTask;
     }
 
-    private async Task HandleMessage(T message)
+    private async Task HandleMessage(T message, string queueName)
     {
-        using (var scope = _serviceScopeFactory.CreateScope())
+        using (var scope = _serviceProvider.CreateScope())
         {
             var handler = scope.ServiceProvider.GetRequiredService<IAccommodationService>();
-            await handler.HandleMessageAsync(message);
+            await handler.HandleMessageAsync(message, queueName);
         }
     }
 }

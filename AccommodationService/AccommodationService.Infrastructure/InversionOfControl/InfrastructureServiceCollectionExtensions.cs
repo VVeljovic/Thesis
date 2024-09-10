@@ -40,7 +40,7 @@ namespace AccommodationService.Infrastructure.InversionOfControl
                  var connection = provider.GetRequiredService<IConnection>();
                  return connection.CreateModel();
              });     
-            services.AddScoped(typeof(IRabbitMQConsumer<>), typeof(RabbitMQConsumer<>));
+            services.AddSingleton(typeof(IRabbitMQConsumer<>), typeof(RabbitMQConsumer<>));
             services.AddScoped<IAccommodationService, AccommodationServiceImpl>();
 
             return services;

@@ -52,11 +52,12 @@ namespace AccommodationService.Infrastructure.Services
 
 
 
-        public Task HandleMessageAsync<T>(T message)
+        public Task HandleMessageAsync<T>(T message, string queueName)
         {
             var messageJson = JsonSerializer.Serialize(message);
 
-            Console.WriteLine("Received message:");
+            Console.WriteLine($"Received message from queue: {queueName}");
+            Console.WriteLine("Message content:");
             Console.WriteLine(messageJson);
 
             return Task.CompletedTask;

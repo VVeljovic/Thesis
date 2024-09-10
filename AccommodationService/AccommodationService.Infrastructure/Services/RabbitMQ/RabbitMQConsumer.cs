@@ -21,7 +21,7 @@ public class RabbitMQConsumer<T> : IRabbitMQConsumer<T>
                              autoDelete: false,
                              arguments: null);
     }
-    public void StartConsuming(Func<T, Task> handleMessage)
+    public void StartConsuming(Func<T, string, Task> handleMessage)
     {
         var consumer = new EventingBasicConsumer(_channel);
 
@@ -31,7 +31,7 @@ public class RabbitMQConsumer<T> : IRabbitMQConsumer<T>
             var messageJson = Encoding.UTF8.GetString(body);
             var message = JsonSerializer.Deserialize<T>(messageJson);
 
-            await handleMessage(message);
+            await handleMessage(message, _queueName);
         };
 
         _channel.BasicConsume(queue: _queueName,
