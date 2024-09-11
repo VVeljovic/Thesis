@@ -20,16 +20,18 @@ namespace AccommodationService.Domain.Models
 
         public decimal PricePerNight { get; set; }
 
+        public decimal NumberOfGuests { get; set; }
+
         public DateTime AvailableFrom { get; set; }
 
         public DateTime AvailableTo { get; set; }
 
         public List<String> Photos { get; set; }
-        
+
         public string UserId { get; set; }
 
-        public Amenity Amenity { get; set; } 
-        
+        public Amenity Amenity { get; set; }
+
         public GeoJsonPoint<GeoJson2DGeographicCoordinates> Location { get; set; }
 
         public List<Review> LastFiveReviews { get; set; } = new List<Review>(5);

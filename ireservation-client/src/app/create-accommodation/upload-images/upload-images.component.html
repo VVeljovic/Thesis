@@ -1,0 +1,21 @@
+    <h1>Upload Images</h1>
+    <div class="wrapper">
+      <div *ngFor="let imagePreview of imagePreviews; let i = index" class="box">
+        <div 
+          class="js--image-preview" 
+          [ngClass]="{'js--no-default': imagePreview}" 
+          [ngStyle]="{'background-image': 'url(' + imagePreview + ')'}"
+        ></div>
+        <div class="upload-options">
+          <label>
+            <input 
+              type="file" 
+              class="image-upload" 
+              accept="image/*" 
+              (change)="onFileSelected($event, i + 1)" 
+            />
+          </label>
+        </div>
+      </div>
+    </div>
+  

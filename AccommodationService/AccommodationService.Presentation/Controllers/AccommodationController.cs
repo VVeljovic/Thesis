@@ -21,7 +21,6 @@ namespace AccommodationService.Presentation.Controllers
         [HttpPost("create-accommodation")]
         public async Task<IActionResult> CreateAccommodationAsync(AccommodationDto accommodationDto)
         {
-           
             await _accommodationService.InsertAccommodationAsync(accommodationDto);
             return Ok(accommodationDto);
         }

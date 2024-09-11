@@ -23,6 +23,11 @@ namespace AccommodationService.Domain.Models
         public bool? NonSmokingRooms { get; set; }
 
         public bool? RoomService { get; set; }
-        
+
+        public bool? Balcony { get; set; }
+
+        public bool? Television { get; set; }
+
+        public bool? AirConditioning { get; set; }
     }
 }
