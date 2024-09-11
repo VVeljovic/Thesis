@@ -6,5 +6,6 @@ import { CreateFormComponent } from './create-form/create-form.component';
 
 export const routes: Routes = [
     { path: 'createAccommodation', component: CreateFormComponent }, 
-    {path:'uploadImages',component:UploadImagesComponent}
+    {path:'',component:MainPageComponent},
+    { path: 'accommodation/:id', component: AccommodationPageComponent }
 ];

@@ -8,7 +8,7 @@ export interface Accommodation {
     numberOfGuests: number;
     availableFrom: Date;
     availableTo: Date;
-    photos: string[]; 
+    photos: (string | ArrayBuffer | null)[]; 
     userId: string;
     amenity: Amenity; 
     longitude: number;

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
+import { Accommodation } from '../models/accommodation';
 
 @Injectable({
   providedIn: 'root'
@@ -27,5 +28,15 @@ export class AccommodationService {
   getMyLocation()
   {
     return this.httpClient.get('https://ipapi.co/json/');
+  }
+  createAccomodation(accommodationModel : Accommodation)
+  {
+    console.log(accommodationModel);
+     this.httpClient.post(`http://localhost:5153/Accommodation/create-accommodation`,accommodationModel).subscribe((response)=>console.log(response));
+  }
+  getAccommodation(id : string)
+  {
+    console.log(id);
+     return this.httpClient.get(`http://localhost:5153/Accommodation/get-accommodation-by-id/${id}`);
   }
 }

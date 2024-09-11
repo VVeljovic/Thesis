@@ -49,55 +49,16 @@
         </div>
     </div>
 </div>
-<div class="content-container">
-    <div class="content-window">
-        <img src="https://dynamicmedia.livenationinternational.com/o/v/v/7897490e-2cd3-44e0-b620-78878419a7fc.jpg" alt="Kevin">
-        <div class="content-title">Go VIP with Kevin Hart</div>
-        <div class="content-host">Hosted by Kevin Hart</div>
-        <div class="content-date">Coming 21 August</div>
+<div class="content-container" style="cursor: pointer;">
+    <div class="content-window"*ngFor="let item of accommodations"(click)="openAccommodation(item.id)" style="cursor: pointer;">
+        <img [src]="
+            item.photos[0] ">
+        <div class="content-title">{{item.propertyName}}</div>
+        <div class="content-host">{{item.address}}</div>
+        <div class="content-date">Available from {{ item.availableFrom | date: 'yyyy-MM-dd' }}</div>
+        <div class="content-date">Available to {{ item.availableTo | date: 'yyyy-MM-dd' }}</div>
     </div>
-    <div class="content-window">
-        <img src="https://cdn.britannica.com/81/250281-050-C80CCDEB/Athens-Greece-2017-flame-transfer-organizers-Pyeongchang-South-Korean-Winter-Olympics-2018.jpg" alt="Olympic">
-        <div class="content-title">Watch the Olympic Games 2024</div>
-        <div class="content-host">Hosted by Paris Olympics</div>
-        <div class="content-date">Started on 26 July</div>
-    </div>
-    <div class="content-window">
-        <img src="https://cdn.londonandpartners.com/visit/london-organisations/houses-of-parliament/63950-640x360-london-icons2-640.jpg" alt="London">
-        <div class="content-title">Explore London</div>
-        <div class="content-host">Hosted by City Tours</div>
-        <div class="content-date">Join us anytime</div>
-    </div>
-    <div class="content-window">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a3/June_odd-eyed-cat.jpg" alt="Cat">
-        <div class="content-title">Cat Lovers Meetup</div>
-        <div class="content-host">Hosted by Pet Society</div>
-        <div class="content-date">Coming 15 September</div>
-    </div>
-    <div class="content-window">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/62/Starsinthesky.jpg" alt="Stargazing">
-        <div class="content-title">Stargazing Night</div>
-        <div class="content-host">Hosted by Astronomy Club</div>
-        <div class="content-date">Coming 10 August</div>
-    </div>
-    <div class="content-window">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTACtVMU261b_Y5b8mOUpXtHd3dyhxkGyf8Zg&s" alt="Comic-Con">
-        <div class="content-title">Comic-Con 2024</div>
-        <div class="content-host">Hosted by Comic-Con</div>
-        <div class="content-date">Coming 25 October</div>
-    </div>
-    <div class="content-window">
-        <img src="https://plus.unsplash.com/premium_photo-1683141424343-60a8b9639309?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Coffee">
-        <div class="content-title">Wine Tasting Event</div>
-        <div class="content-host">Hosted by Vineyards</div>
-        <div class="content-date">Coming 5 November</div>
-    </div>
-    <div class="content-window">
-        <img src="https://plus.unsplash.com/premium_photo-1683121669638-370a5634bcfa?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Beach">
-        <div class="content-title">Beach Party</div>
-        <div class="content-host">Hosted by Beach Club</div>
-        <div class="content-date">Coming 22 August</div>
-    </div>
+   
 </div>
 <div class="footer">
     <div class="upperend">

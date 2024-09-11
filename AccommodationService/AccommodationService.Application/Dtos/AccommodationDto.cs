@@ -5,11 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 
 namespace AccommodationService.Application.Dtos
 {
     public class AccommodationDto
     {
+        public string? Id { get; set; }
         public string PropertyName { get; set; }
 
         public string Description { get; set; }
@@ -47,6 +49,7 @@ namespace AccommodationService.Application.Dtos
                 AvailableTo = acommodationDto.AvailableTo,
                 Photos = acommodationDto.Photos,
                 UserId = acommodationDto.UserId,
+               // Amenity = acommodationDto.Amenity,
                 Location = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(
                     new GeoJson2DGeographicCoordinates(acommodationDto.Longitude, acommodationDto.Latitude))
 
@@ -57,6 +60,7 @@ namespace AccommodationService.Application.Dtos
         {
             return new AccommodationDto
             {
+                Id = accommodation.Id.ToString(),
                 PropertyName = accommodation.PropertyName,
                 Description = accommodation.Description,
                 Address = accommodation.Address,
@@ -65,6 +69,7 @@ namespace AccommodationService.Application.Dtos
                 AvailableTo = accommodation.AvailableTo,
                 Photos = accommodation.Photos,
                 UserId = accommodation.UserId,
+                //Amenity = accommodation.Amenity,
                 Longitude = accommodation.Location.Coordinates.Longitude,
                 Latitude = accommodation.Location.Coordinates.Latitude
 

@@ -8,7 +8,7 @@ using MongoDB.Bson;
 namespace AccommodationService.Presentation.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class AccommodationController : ControllerBase
     {
         private readonly IAccommodationService _accommodationService;
@@ -19,7 +19,7 @@ namespace AccommodationService.Presentation.Controllers
         }
 
         [HttpPost("create-accommodation")]
-        public async Task<IActionResult> CreateAccommodationAsync(AccommodationDto accommodationDto)
+        public async Task<IActionResult> CreateAccommodationAsync([FromBody]AccommodationDto accommodationDto)
         {
             await _accommodationService.InsertAccommodationAsync(accommodationDto);
             return Ok(accommodationDto);

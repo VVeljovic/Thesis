@@ -12,6 +12,8 @@ services:
       - "27017:27017"
     networks:
       - thesis
+    volumes:
+      - ./Accommodations.json:/docker-entrypoint-initdb.d/Accommodations.json:ro
   
   mongo-express:
     image: mongo-express:latest
@@ -50,6 +52,17 @@ services:
       - 15672:15672
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+  mongo-import:
+    image: mongo:latest
+    container_name: mongo-import
+    command: >
+      bash -c "
+        mongoimport --host mongodb --port 27017 --username root --password example --authenticationDatabase admin --db AccommodationDB --collection Accommodations --file /docker-entrypoint-initdb.d/Accommodations.json --jsonArray
+      "
+    depends_on:
+      - mongo
+    networks:
+      - thesis
 volumes:
   rabbitmq_data:
 networks:

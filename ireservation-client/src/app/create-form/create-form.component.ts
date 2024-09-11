@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { UploadImagesComponent } from '../create-accommodation/upload-images/upload-images.component';
 import { debounceTime, Observable, switchMap } from 'rxjs';
 import { AccommodationService } from '../services/accommodation.service';
+import { Accommodation } from '../models/accommodation';
+import { Amenity } from '../models/amenity';
 
 @Component({
   selector: 'app-create-form',
@@ -73,9 +75,9 @@ export class CreateFormComponent {
       console.log(response)
       this.longitude = response.results[0].geometry['lng']
       this.latitude=response.results[0].geometry['lat']
-      if (!this.bookingForm.valid) {
+      
     
-        const amenity = {
+        const amenity : Amenity = {
           parking: this.bookingForm.get('parking')?.value,
           wifi: this.bookingForm.get('wifi')?.value,
           fitnessCentre: this.bookingForm.get('fitnessCentre')?.value,
@@ -85,29 +87,31 @@ export class CreateFormComponent {
           television: this.bookingForm.get('television')?.value,
           spa: this.bookingForm.get('spa')?.value,
           nonSmokingRooms: this.bookingForm.get('nonSmokingRooms')?.value,
-          roomService: this.bookingForm.get('roomService')?.value
+          roomService: this.bookingForm.get('roomService')?.value,
+          petsAllowed: this.bookingForm.get('petsAllowed')?.value,
+
         };
   
         console.log('Amenity object:', amenity);
   
        
-        const accommodation = {
-          name: this.bookingForm.get('name')?.value,
-          petsAllowed: this.bookingForm.get('petsAllowed')?.value,
+        const accommodation : Accommodation= {
+          propertyName: this.bookingForm.get('name')?.value,
           pricePerNight: this.bookingForm.get('pricePerNight')?.value,
-          location: this.bookingForm.get('location')?.value,
+          address: this.bookingForm.get('location')?.value,
           numberOfGuests: this.bookingForm.get('numberOfGuests')?.value,
-          arrive: this.bookingForm.get('arrive')?.value,
-          depart: this.bookingForm.get('depart')?.value,
-          comments: this.bookingForm.get('comments')?.value,
-          images: this.selectedImages, 
-          amenities: amenity, 
+          availableFrom: this.bookingForm.get('arrive')?.value,
+          availableTo: this.bookingForm.get('depart')?.value,
+          description: this.bookingForm.get('comments')?.value,
+          photos: this.selectedImages, 
+          amenity: amenity, 
           latitude:this.latitude,
-          longitude:this.longitude
+          longitude:this.longitude,
+          userId:'d00fb6cb-5498-4f78-b6f7-9c52904b6ae5'
         };
-  
+        this.accommodationService.createAccomodation(accommodation);
         console.log('Accommodation object:', accommodation);
-      }
+      
     })
   }
 }
