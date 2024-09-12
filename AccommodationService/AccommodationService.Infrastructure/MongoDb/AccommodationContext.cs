@@ -12,7 +12,7 @@ namespace AccommodationService.Infrastructure.MongoDb
 {
     public class AccommodationContext
     {
-        private  IMongoDatabase _database;
+        private IMongoDatabase _database;
         public IMongoCollection<Accommodation> Accommodations => _database.GetCollection<Accommodation>("Accommodations");
         public IMongoCollection<Amenity> Amenities => _database.GetCollection<Amenity>("Amenity");
         public AccommodationContext(MongoDbSettings settings)
@@ -25,7 +25,7 @@ namespace AccommodationService.Infrastructure.MongoDb
 
         private async void CreateCollectionsAsync()
         {
-            
+
             var collectionNames = _database.ListCollectionNames().ToList();
 
             if (!collectionNames.Contains("Accommodations"))
@@ -56,22 +56,50 @@ namespace AccommodationService.Infrastructure.MongoDb
             var objectId = new ObjectId(id);
             var filter = Builders<Accommodation>.Filter.Eq(accommodation => accommodation.Id, objectId);
             var accommodation = await Accommodations.Find(filter).FirstOrDefaultAsync();
-            if(accommodation!=null)
-            return AccommodationDto.MapAccommodationToDto(accommodation);
+            if (accommodation != null)
+                return AccommodationDto.MapAccommodationToDto(accommodation);
             return null;
         }
 
-        public async Task<IEnumerable<AccommodationDto>> GetAccommodationsAsync(double longitude, double latitude, int pageSize, int pageNumber)
+        public async Task<IEnumerable<AccommodationDto>> GetAccommodationsAsync(
+            double longitude,
+            double latitude,
+            int pageSize,
+            int pageNumber,
+            string? address = null,
+            DateOnly? checkIn = null,
+            DateOnly? checkOut = null)
         {
             var filter = Builders<Accommodation>.Filter.NearSphere(
-               a => a.Location,
-               new GeoJsonPoint<GeoJson2DGeographicCoordinates>(new GeoJson2DGeographicCoordinates(longitude, latitude)));
+                a => a.Location,
+                new GeoJsonPoint<GeoJson2DGeographicCoordinates>(new GeoJson2DGeographicCoordinates(longitude, latitude))
+            );
 
-            var accommodations = await  Accommodations
-                                        .Find(filter)
-                                        .Skip((pageNumber - 1) * pageSize)
-                                        .Limit(pageSize)
-                                        .ToListAsync();
+            if (!string.IsNullOrEmpty(address))
+            {
+                var addressFilter = Builders<Accommodation>.Filter.Regex(a => a.Address, new MongoDB.Bson.BsonRegularExpression(address, "i"));
+                filter = Builders<Accommodation>.Filter.And(filter, addressFilter);
+            }
+
+            if (checkIn.HasValue && checkOut.HasValue)
+            {
+                var checkInStart = checkIn.Value.ToDateTime(TimeOnly.MinValue);
+                var checkOutEnd = checkOut.Value.ToDateTime(TimeOnly.MaxValue);
+
+                var dateFilter = Builders<Accommodation>.Filter.And(
+                    Builders<Accommodation>.Filter.Lte(a => a.AvailableFrom, checkOutEnd),
+                    Builders<Accommodation>.Filter.Gte(a => a.AvailableTo, checkInStart)
+                );
+
+                filter = Builders<Accommodation>.Filter.And(filter, dateFilter);
+            }
+
+            var accommodations = await Accommodations
+                .Find(filter)
+                .Skip((pageNumber - 1) * pageSize)
+                .Limit(pageSize)
+                .ToListAsync();
+
             return accommodations.Select(accommodation => AccommodationDto.MapAccommodationToDto(accommodation));
         }
 

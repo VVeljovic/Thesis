@@ -18,7 +18,7 @@ namespace AccommodationService.Application.Interfaces
 
         public Task<AccommodationDto> GetAccommodationByIdAsync(string id);
 
-        public Task<IEnumerable<AccommodationDto>> GetAccommodationsAsync(double longitude, double latitude, int pageSize, int pageNumber);
+        public Task<IEnumerable<AccommodationDto>> GetAccommodationsAsync(double longitude, double latitude, int pageSize, int pageNumber, string? address = null, DateOnly? checkIn = null,DateOnly? checkOut = null);
 
         public Task<IEnumerable<AccommodationDto>> GetMyAccommodationsAsync(string userId);
 

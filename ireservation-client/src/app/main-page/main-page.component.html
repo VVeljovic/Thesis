@@ -32,22 +32,22 @@
         <div class="multisearchbar">
             <div class="sbpart1">
                 <p class="where">Where</p>
-                <input type="text" name="" id="" placeholder="Search destinations">
+                <input type="text" placeholder="Destination" [(ngModel)]="destination">
             </div>
             <div class="sbpart2">
                 <p class="checkin">Check in</p>
-                <input type="date" name="" id="" placeholder="Add dates"> 
+                <input type="date" placeholder="Check-in" [(ngModel)]="checkInDate">
             </div>
             <div class="sbpart3">
                 <p class="checkout">Check Out</p>
-                <input type="date" name="" id="" placeholder="Add dates"> 
+                <input type="date" placeholder="Check-out" [(ngModel)]="checkOutDate">
             </div>
             <div class="sbpart4">
                 <p class="who">Who</p>
-                <input type="text" name="" id="" placeholder="Add guests">
+                <input type="number" placeholder="Number of guests" [(ngModel)]="numberOfGuests">
             </div>
             <div class="sbpart5">
-                <div class="search-button">
+                <div class="search-button" (click)="search()">
                     <svg class="searchicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true" role="presentation" focusable="false" style="display: block; fill:none ; height: 16px; width: 16px; stroke:white ; stroke-width: 4; overflow: visible;"><path fill="none" d="M13 24a11 11 0 1 0 0-22 11 11 0 0 0 0 22zm8-3 9 9"></path></svg>
                 </div>
             </div>

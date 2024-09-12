@@ -31,10 +31,18 @@ namespace AccommodationService.Presentation.Controllers
             var accommodationDto = await _accommodationService.GetAccommodationByIdAsync(id);
             return Ok(accommodationDto);
         }
+
         [HttpGet("get-accommodations/{longitude}/{latitude}/{pageSize}/{pageNumber}")]
-        public async Task<IActionResult> GetAccommodations(double longitude, double latitude, int pageSize, int pageNumber,[FromQuery]string address, [FromQuery]DateOnly checkIn, [FromQuery]DateOnly checkOut)
+        public async Task<IActionResult> GetAccommodations(
+    double longitude, 
+    double latitude, 
+    int pageSize, 
+    int pageNumber, 
+    [FromQuery] string? address = null, 
+    [FromQuery] DateOnly? checkIn = null, 
+    [FromQuery] DateOnly? checkOut = null)
         {
-            var accommodationsDto = await _accommodationService.GetAccommodationsAsync(longitude,latitude,pageSize, pageNumber);
+            var accommodationsDto = await _accommodationService.GetAccommodationsAsync(longitude,latitude,pageSize, pageNumber, address, checkIn, checkOut);
             return Ok(accommodationsDto);
         }
 

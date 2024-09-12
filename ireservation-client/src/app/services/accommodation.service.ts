@@ -14,8 +14,28 @@ export class AccommodationService {
   
   constructor(private httpClient: HttpClient) { }
 
-  getAccommodations(longitude:number,latitude:number,pageSize: number, pageNumber: number) {
-    return this.httpClient.get(`${environment.api}/Accommodation/get-accommodations/${longitude}/${latitude}/${pageSize}/${pageNumber}`)
+  getAccommodations(
+    longitude: number, 
+    latitude: number, 
+    pageSize: number, 
+    pageNumber: number, 
+    address?: string, 
+    checkIn?: string, 
+    checkOut?: string
+  ) {
+    let params: any = {};
+  
+    if (address) {
+      params.address = address;
+    }
+    if (checkIn) {
+      params.checkIn = checkIn;
+    }
+    if (checkOut) {
+      params.checkOut = checkOut;
+    }
+  
+    return this.httpClient.get(`${environment.api}/Accommodation/get-accommodations/${longitude}/${latitude}/${pageSize}/${pageNumber}`, { params });
   }
   getCoordinates(city: string): Observable<any> {
     const apiUrl = `https://api.opencagedata.com/geocode/v1/json?q=${city}&key=${this.apiKey}`;

@@ -45,9 +45,9 @@ namespace AccommodationService.Infrastructure.Services
             return accommodationDto;
         }
 
-        public async Task<IEnumerable<AccommodationDto>> GetAccommodationsAsync(double longitude, double latitude, int pageSize, int pageNumber)
+        public async Task<IEnumerable<AccommodationDto>> GetAccommodationsAsync(double longitude, double latitude, int pageSize, int pageNumber, string? address = null, DateOnly? checkIn = null, DateOnly? checkOut = null)
         {
-            return await _dbContext.GetAccommodationsAsync(longitude, latitude, pageSize, pageNumber);
+            return await _dbContext.GetAccommodationsAsync(longitude, latitude, pageSize, pageNumber, address, checkIn, checkOut);
         }
 
         public async Task<IEnumerable<AccommodationDto>> GetMyAccommodationsAsync(string userId)
