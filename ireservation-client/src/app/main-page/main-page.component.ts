@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AccommodationService } from '../services/accommodation.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { KeycloakService } from '../services/keycloak.service';
 
 @Component({
   selector: 'app-main-page',
@@ -14,7 +15,7 @@ export class MainPageComponent {
   currLat : number = -1;
   currLong : number = -1;
   accommodations:any;
-  constructor(private router:Router,private accommodationService : AccommodationService)
+  constructor(private router:Router,private accommodationService : AccommodationService, private keycloakService : KeycloakService)
   {
       if(navigator.geolocation)
       {
@@ -30,5 +31,9 @@ export class MainPageComponent {
   }
   openAccommodation(id: string): void {
     this.router.navigate(['/accommodation', id]);
+  }
+  logout()
+  {
+    this.keycloakService.logout();
   }
 }

@@ -32,7 +32,7 @@ namespace AccommodationService.Presentation.Controllers
             return Ok(accommodationDto);
         }
         [HttpGet("get-accommodations/{longitude}/{latitude}/{pageSize}/{pageNumber}")]
-        public async Task<IActionResult> GetAccommodations(double longitude, double latitude, int pageSize, int pageNumber)
+        public async Task<IActionResult> GetAccommodations(double longitude, double latitude, int pageSize, int pageNumber,[FromQuery]string address, [FromQuery]DateOnly checkIn, [FromQuery]DateOnly checkOut)
         {
             var accommodationsDto = await _accommodationService.GetAccommodationsAsync(longitude,latitude,pageSize, pageNumber);
             return Ok(accommodationsDto);

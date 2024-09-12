@@ -21,6 +21,8 @@ export class CreateFormComponent {
   selectedImages: (string | ArrayBuffer | null)[] = Array(8).fill(null);
   longitude:number=-1;
   latitude:number=-1;
+   obj =   JSON.parse(localStorage.getItem('userInfo') || '{}');
+  userId = this.obj.sub;
   selectCity(city: string): void {
     this.bookingForm.get('location')?.setValue(city);
     console.log('a');
@@ -107,7 +109,7 @@ export class CreateFormComponent {
           amenity: amenity, 
           latitude:this.latitude,
           longitude:this.longitude,
-          userId:'d00fb6cb-5498-4f78-b6f7-9c52904b6ae5'
+          userId:this.userId
         };
         this.accommodationService.createAccomodation(accommodation);
         console.log('Accommodation object:', accommodation);
