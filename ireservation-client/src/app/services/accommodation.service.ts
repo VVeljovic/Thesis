@@ -49,10 +49,10 @@ export class AccommodationService {
   {
     return this.httpClient.get('https://ipapi.co/json/');
   }
-  createAccomodation(accommodationModel : Accommodation)
+  createAccomodation(accommodationModel : Accommodation) : Observable<any>
   {
     console.log(accommodationModel);
-     this.httpClient.post(`http://localhost:5153/Accommodation/create-accommodation`,accommodationModel).subscribe((response)=>console.log(response));
+     return this.httpClient.post(`http://localhost:5153/Accommodation/create-accommodation`,accommodationModel);
   }
   getAccommodation(id : string)
   {

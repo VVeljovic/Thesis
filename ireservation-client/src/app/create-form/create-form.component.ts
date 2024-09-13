@@ -6,11 +6,13 @@ import { debounceTime, Observable, switchMap } from 'rxjs';
 import { AccommodationService } from '../services/accommodation.service';
 import { Accommodation } from '../models/accommodation';
 import { Amenity } from '../models/amenity';
+import { NavbarComponent } from '../navbar/navbar.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, UploadImagesComponent, FormsModule],
+  imports: [ReactiveFormsModule, CommonModule, UploadImagesComponent, FormsModule, NavbarComponent],
   templateUrl: './create-form.component.html',
   styleUrl: './create-form.component.scss'
 })
@@ -35,7 +37,7 @@ export class CreateFormComponent {
   }
 
   cities: string[] = [];
-  constructor(private fb: FormBuilder, private accommodationService: AccommodationService) {
+  constructor(private fb: FormBuilder, private accommodationService: AccommodationService, private router : Router) {
     this.bookingForm = this.fb.group({
       name: ['', Validators.required],
       petsAllowed: [undefined, Validators.required],
@@ -111,7 +113,10 @@ export class CreateFormComponent {
           longitude:this.longitude,
           userId:this.userId
         };
-        this.accommodationService.createAccomodation(accommodation);
+        this.accommodationService.createAccomodation(accommodation).subscribe((response)=>{
+          console.log(response)
+          this.router.navigate(['']);
+        });
         console.log('Accommodation object:', accommodation);
       
     })
