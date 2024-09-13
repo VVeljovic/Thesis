@@ -21,7 +21,8 @@ export class AccommodationService {
     pageNumber: number, 
     address?: string, 
     checkIn?: string, 
-    checkOut?: string
+    checkOut?: string,
+    numberOfGuests?:number
   ) {
     let params: any = {};
   
@@ -33,6 +34,10 @@ export class AccommodationService {
     }
     if (checkOut) {
       params.checkOut = checkOut;
+    }
+    if(numberOfGuests && numberOfGuests!=0)
+    {
+      params.numberOfGuests = numberOfGuests;
     }
   
     return this.httpClient.get(`${environment.api}/Accommodation/get-accommodations/${longitude}/${latitude}/${pageSize}/${pageNumber}`, { params });

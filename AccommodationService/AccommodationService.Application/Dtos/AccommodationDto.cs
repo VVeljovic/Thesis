@@ -69,6 +69,7 @@ namespace AccommodationService.Application.Dtos
                 AvailableTo = accommodation.AvailableTo,
                 Photos = accommodation.Photos,
                 UserId = accommodation.UserId,
+                NumberOfGuests = accommodation.NumberOfGuests,
                 //Amenity = accommodation.Amenity,
                 Longitude = accommodation.Location.Coordinates.Longitude,
                 Latitude = accommodation.Location.Coordinates.Latitude

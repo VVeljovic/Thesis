@@ -82,7 +82,8 @@ export class MainPageComponent {
       this.currentPage,
       this.destination,
       this.checkInDate,
-      this.checkOutDate
+      this.checkOutDate,
+      this.numberOfGuests
     ).subscribe((response) => {
       this.accommodations = response;
       console.log(response);

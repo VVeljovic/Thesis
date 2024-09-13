@@ -68,7 +68,8 @@ namespace AccommodationService.Infrastructure.MongoDb
             int pageNumber,
             string? address = null,
             DateOnly? checkIn = null,
-            DateOnly? checkOut = null)
+            DateOnly? checkOut = null,
+            int? numberOfGuests = null)
         {
             var filter = Builders<Accommodation>.Filter.NearSphere(
                 a => a.Location,
@@ -80,7 +81,11 @@ namespace AccommodationService.Infrastructure.MongoDb
                 var addressFilter = Builders<Accommodation>.Filter.Regex(a => a.Address, new MongoDB.Bson.BsonRegularExpression(address, "i"));
                 filter = Builders<Accommodation>.Filter.And(filter, addressFilter);
             }
-
+            if (numberOfGuests != null && numberOfGuests !=0)
+            {
+                var numberOfGuestsFilter = Builders<Accommodation>.Filter.Eq("NumberOfGuests", numberOfGuests);
+                filter = Builders<Accommodation>.Filter.And(filter, numberOfGuestsFilter);
+            }
             if (checkIn.HasValue && checkOut.HasValue)
             {
                 var checkInStart = checkIn.Value.ToDateTime(TimeOnly.MinValue);

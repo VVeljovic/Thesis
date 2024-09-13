@@ -40,9 +40,10 @@ namespace AccommodationService.Presentation.Controllers
     int pageNumber, 
     [FromQuery] string? address = null, 
     [FromQuery] DateOnly? checkIn = null, 
-    [FromQuery] DateOnly? checkOut = null)
+    [FromQuery] DateOnly? checkOut = null,
+    [FromQuery]int ? numberOfGuests = null )
         {
-            var accommodationsDto = await _accommodationService.GetAccommodationsAsync(longitude,latitude,pageSize, pageNumber, address, checkIn, checkOut);
+            var accommodationsDto = await _accommodationService.GetAccommodationsAsync(longitude,latitude,pageSize, pageNumber, address, checkIn, checkOut, numberOfGuests);
             return Ok(accommodationsDto);
         }
 
