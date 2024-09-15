@@ -1,4 +1,4 @@
-using AccommodationService.Application.Dtos;
+using AccommodationService.Application.Dtos.ChoreographyDtos;
 using AccommodationService.Application.Interfaces;
 using AccommodationService.Infrastructure.InversionOfControl;
 using AccommodationService.Infrastructure.MongoDb;
@@ -23,8 +23,8 @@ builder.Services.AddSwaggerGen();
 var mongoDbSettings = builder.Configuration.GetSection("MongoDbSettings").Get<MongoDbSettings>();
 builder.Services.AddSingleton(mongoDbSettings);
 builder.Services.AddInfrastructure();
-builder.Services.AddHostedService<RabbitMQConsumerHostedService<ReservationRequestDto>>();
-
+builder.Services.AddHostedService<RabbitMQConsumerHostedService<TransactionRequestDto>>();
+builder.Services.AddHostedService<RabbitMQConsumerHostedService<TransactionResponseDto>>();
 var app = builder.Build();
 app.UseCors("AllowSpecificOrigins");
 // Configure the HTTP request pipeline.

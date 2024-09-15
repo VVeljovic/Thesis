@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver.GeoJsonObjectModel;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,10 @@ namespace AccommodationService.Domain.Models
 
         public string UserId { get; set; }
 
+        [BsonElement("AmenityId")]
+        public ObjectId AmenityId { get; set; }
+
+        [BsonIgnore]
         public Amenity Amenity { get; set; }
 
         public GeoJsonPoint<GeoJson2DGeographicCoordinates> Location { get; set; }

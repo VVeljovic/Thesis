@@ -14,7 +14,7 @@ namespace AccommodationService.Infrastructure.MongoDb
     {
         private IMongoDatabase _database;
         public IMongoCollection<Accommodation> Accommodations => _database.GetCollection<Accommodation>("Accommodations");
-        public IMongoCollection<Amenity> Amenities => _database.GetCollection<Amenity>("Amenity");
+        public IMongoCollection<Amenity> Amenities => _database.GetCollection<Amenity>("Amenities");
         public AccommodationContext(MongoDbSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
@@ -43,6 +43,9 @@ namespace AccommodationService.Infrastructure.MongoDb
 
         public async Task InsertAccommodationAsync(Accommodation accommodation)
         {
+            await Amenities.InsertOneAsync(accommodation.Amenity);
+            var amenityId = accommodation.Amenity.Id;
+            accommodation.AmenityId = amenityId;
             await Accommodations.InsertOneAsync(accommodation);
         }
 
@@ -96,6 +99,7 @@ namespace AccommodationService.Infrastructure.MongoDb
                     Builders<Accommodation>.Filter.Gte(a => a.AvailableTo, checkInStart)
                 );
 
+
                 filter = Builders<Accommodation>.Filter.And(filter, dateFilter);
             }
 
@@ -104,17 +108,48 @@ namespace AccommodationService.Infrastructure.MongoDb
                 .Skip((pageNumber - 1) * pageSize)
                 .Limit(pageSize)
                 .ToListAsync();
+            var accommodationIds = accommodations.Select(a => a.AmenityId).Distinct().ToList();
+            var amenities = await Amenities.Find(a => accommodationIds.Contains(a.Id)).ToListAsync();
+            var amenityDict = amenities.ToDictionary(a => a.Id);
+            var accommodationDtos = accommodations.Select(accommodation =>
+            {
+                var dto = AccommodationDto.MapAccommodationToDto(accommodation);
+                if (amenityDict.TryGetValue(accommodation.AmenityId, out var amenity))
+                {
+                    dto.Amenity = AmenityDto.MapToAmenityDto(amenity); 
+                }
+                return dto;
+            });
 
-            return accommodations.Select(accommodation => AccommodationDto.MapAccommodationToDto(accommodation));
+            return accommodationDtos;
         }
 
         public async Task<IEnumerable<AccommodationDto>> GetMyAccommodationsAsync(string userId)
         {
             var accommodations = await Accommodations.Find(accommodation => accommodation.UserId == userId)
                                                            .ToListAsync();
-
             return accommodations.Select(accommodation => AccommodationDto.MapAccommodationToDto(accommodation));
+        }
 
+        public async Task UpdateAccommodationAsync(Accommodation updatedAccommodation)
+        {
+            var filter = Builders<Accommodation>.Filter.Eq(a => a.Id, updatedAccommodation.Id);
+
+            var update = Builders<Accommodation>.Update
+                .Set(a => a.PropertyName, updatedAccommodation.PropertyName)
+                .Set(a => a.Description, updatedAccommodation.Description)
+                .Set(a => a.Address, updatedAccommodation.Address)
+                .Set(a => a.PricePerNight, updatedAccommodation.PricePerNight)
+                .Set(a => a.NumberOfGuests, updatedAccommodation.NumberOfGuests)
+                .Set(a => a.AvailableFrom, updatedAccommodation.AvailableFrom)
+                .Set(a => a.AvailableTo, updatedAccommodation.AvailableTo)
+                .Set(a => a.Photos, updatedAccommodation.Photos)
+                .Set(a => a.UserId, updatedAccommodation.UserId)
+                
+                .Set(a => a.Location, updatedAccommodation.Location)
+                .Set(a => a.LastFiveReviews, updatedAccommodation.LastFiveReviews);
+
+            await Accommodations.UpdateOneAsync(filter, update);
         }
 
     }

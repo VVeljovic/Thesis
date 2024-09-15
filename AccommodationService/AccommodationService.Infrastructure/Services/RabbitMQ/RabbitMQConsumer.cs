@@ -7,16 +7,23 @@ using RabbitMQ.Client.Events;
 public class RabbitMQConsumer<T> : IRabbitMQConsumer<T>
 {
     private readonly IModel _channel;
-    private readonly string _queueName = "transaction_request";
-    public RabbitMQConsumer(IModel channel)
+    private readonly string[] _queueNames;
+
+    public RabbitMQConsumer(IModel channel, string[] queueNames)
     {
         _channel = channel;
-        _channel.QueueDeclare(queue: _queueName,
-                             durable: false,
-                             exclusive: false,
-                             autoDelete: false,
-                             arguments: null);
+        _queueNames = queueNames;
+
+        foreach (var queueName in _queueNames)
+        {
+            _channel.QueueDeclare(queue: queueName,
+                                  durable: false,
+                                  exclusive: false,
+                                  autoDelete: false,
+                                  arguments: null);
+        }
     }
+
     public void StartConsuming(Func<T, string, Task> handleMessage)
     {
         var consumer = new EventingBasicConsumer(_channel);
@@ -27,11 +34,14 @@ public class RabbitMQConsumer<T> : IRabbitMQConsumer<T>
             var messageJson = Encoding.UTF8.GetString(body);
             var message = JsonSerializer.Deserialize<T>(messageJson);
 
-            await handleMessage(message, _queueName);
+            await handleMessage(message, ea.RoutingKey);
         };
 
-        _channel.BasicConsume(queue: _queueName,
-                             autoAck: true,
-                             consumer: consumer);
+        foreach (var queueName in _queueNames)
+        {
+            _channel.BasicConsume(queue: queueName,
+                                 autoAck: true,
+                                 consumer: consumer);
+        }
     }
 }

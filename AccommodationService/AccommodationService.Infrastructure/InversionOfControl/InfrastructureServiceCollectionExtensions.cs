@@ -1,4 +1,5 @@
 ﻿using AccommodationService.Application.Dtos;
+using AccommodationService.Application.Dtos.ChoreographyDtos;
 using AccommodationService.Application.Interfaces;
 using AccommodationService.Infrastructure.MongoDb;
 using AccommodationService.Infrastructure.Services;
@@ -19,6 +20,7 @@ namespace AccommodationService.Infrastructure.InversionOfControl
             services.AddScoped<IReviewService, ReviewServiceImpl>();
             services.AddSingleton<AccommodationContext>();
             services.AddSingleton<ReviewContext>();
+            services.AddSingleton<RabbitMQQueues>();
 
             services.AddSingleton(provider =>
             {
@@ -40,9 +42,22 @@ namespace AccommodationService.Infrastructure.InversionOfControl
                 var connection = provider.GetRequiredService<IConnection>();
                 return connection.CreateModel();
             });
-            services.AddSingleton(typeof(IRabbitMQConsumer<>), typeof(RabbitMQConsumer<>));
-            services.AddScoped<IAccommodationService, AccommodationServiceImpl>();
             services.AddScoped(typeof(IRabbitMQProducer<>), typeof(RabbitMQProducer<>));
+
+            services.AddScoped<IAccommodationService, AccommodationServiceImpl>();
+           services.AddSingleton<IRabbitMQConsumer<TransactionRequestDto>>(sp =>
+            {
+                var channel = sp.GetRequiredService<IModel>();
+                var queues = sp.GetRequiredService<RabbitMQQueues>();
+                return new RabbitMQConsumer<TransactionRequestDto>(channel, queues.TransactionRequestQueues);
+            });
+
+            services.AddSingleton<IRabbitMQConsumer<TransactionResponseDto>>(sp =>
+            {
+                var channel = sp.GetRequiredService<IModel>();
+                var queues = sp.GetRequiredService<RabbitMQQueues>();
+                return new RabbitMQConsumer<TransactionResponseDto>(channel, queues.TransactionResponseQueues);
+            });
 
             return services;
         }

@@ -1,3 +1,4 @@
+using AccommodationService.Application.Dtos;
 using AccommodationService.Infrastructure.MongoDb;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +13,8 @@ var mongoDbSettings = builder.Configuration.GetSection("MongoDbSettings").Get<Mo
 builder.Services.AddSingleton(mongoDbSettings);
 builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();
-builder.Services.AddHostedService<RabbitMQConsumerHostedService<ReservationRequestDto>>();
+builder.Services.AddHostedService<RabbitMQConsumerHostedService<TransactionRequestDto>>();
+builder.Services.AddHostedService<RabbitMQConsumerHostedService<TransactionResponseDto>>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

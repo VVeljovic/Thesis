@@ -10,6 +10,7 @@ using System.Text.Json;
 using System.ComponentModel;
 using System.Threading;
 using TransactionService.Domain.Entities;
+using TransactionService.Application.Dtos;
 
 namespace TransactionService.Infrastructure.Services
 {
@@ -17,8 +18,8 @@ namespace TransactionService.Infrastructure.Services
     {
         private readonly TransactionDbContext _transactionDbContext;
 
-        IRabbitMQProducer<CreateTransactionCommand> _rabbitMQPublisher;
-        public TransactionServiceImpl(TransactionDbContext transactionDbContext, IRabbitMQProducer<CreateTransactionCommand> rabbitMQPublisher)
+        IRabbitMQProducer<TransactionRequestDto> _rabbitMQPublisher;
+        public TransactionServiceImpl(TransactionDbContext transactionDbContext, IRabbitMQProducer<TransactionRequestDto> rabbitMQPublisher)
         {  
             _transactionDbContext = transactionDbContext;
             _rabbitMQPublisher = rabbitMQPublisher;
@@ -27,17 +28,33 @@ namespace TransactionService.Infrastructure.Services
         {
             var transaction = CreateTransactionCommand.MapToTransaction(createTransactionCommand);
             await _transactionDbContext.CreateTransactionAsync(transaction);
-            await _rabbitMQPublisher.PublishMessageAsync(createTransactionCommand, RabbitMQQueues.ReservationRequest);
+            var transactionRequest = TransactionRequestDto.MapToTransactionRequestDto(transaction);
+            await _rabbitMQPublisher.PublishMessageAsync(transactionRequest, "transaction_request");
+        }
+        public async Task HandleMessageAsync<T>(T message, string queueName)
+        {
+            if (queueName == "transaction_failed")
+            {
+                await TransactionFailedAsync(message, "transaction_failed");
+                return;
+            }
+            else
+            {
+                await TransactionSuccessAsync(message, "transaction_success");
+                return;
+            }
+        }
+        private async Task TransactionSuccessAsync<T>(T message, string queueName)
+        {
+            var transactionFailedMessageDto = message as TransactionResponseDto;
+            await _transactionDbContext.UpdateTransactionStatusAsync(transactionFailedMessageDto.TransactionId, transactionFailedMessageDto.TransactionStatus);
+
         }
 
-        public Task HandleMessageAsync<T>(T message, string queueName)
+        private async Task TransactionFailedAsync<T>(T message, string queueName)
         {
-            var messageJson = JsonSerializer.Serialize(message);
-            Console.WriteLine($"Received message from queue: {queueName}");
-            Console.WriteLine("Message content:");
-            Console.WriteLine(messageJson);
-
-            return Task.CompletedTask;
+            var transactionFailedMessageDto = message as TransactionResponseDto;
+            await _transactionDbContext.UpdateTransactionStatusAsync(transactionFailedMessageDto.TransactionId, transactionFailedMessageDto.TransactionStatus);
         }
     }
 }

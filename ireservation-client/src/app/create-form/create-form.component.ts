@@ -82,17 +82,17 @@ export class CreateFormComponent {
       
     
         const amenity : Amenity = {
-          parking: this.bookingForm.get('parking')?.value,
-          wifi: this.bookingForm.get('wifi')?.value,
-          fitnessCentre: this.bookingForm.get('fitnessCentre')?.value,
-          swimmingPool: this.bookingForm.get('swimmingPool')?.value,
-          airConditioning: this.bookingForm.get('airConditioning')?.value,
-          balcony: this.bookingForm.get('balcony')?.value,
-          television: this.bookingForm.get('television')?.value,
-          spa: this.bookingForm.get('spa')?.value,
-          nonSmokingRooms: this.bookingForm.get('nonSmokingRooms')?.value,
-          roomService: this.bookingForm.get('roomService')?.value,
-          petsAllowed: this.bookingForm.get('petsAllowed')?.value,
+          parking: this.bookingForm.get('parking')?.value || false,
+          wifi: this.bookingForm.get('wifi')?.value || false,
+          fitnessCentre: this.bookingForm.get('fitnessCentre')?.value || false,
+          swimmingPool: this.bookingForm.get('swimmingPool')?.value || false,
+          airConditioning: this.bookingForm.get('airConditioning')?.value || false,
+          balcony: this.bookingForm.get('balcony')?.value || false,
+          television: this.bookingForm.get('television')?.value || false,
+          spa: this.bookingForm.get('spa')?.value || false,
+          nonSmokingRooms: this.bookingForm.get('nonSmokingRooms')?.value || false,
+          roomService: this.bookingForm.get('roomService')?.value || false,
+          petsAllowed: this.bookingForm.get('petsAllowed')?.value || false,
 
         };
   

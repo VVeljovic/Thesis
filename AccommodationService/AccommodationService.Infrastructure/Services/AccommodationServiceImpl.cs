@@ -11,6 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
+using System.Transactions;
+using AccommodationService.Application.Dtos.ChoreographyDtos;
 
 namespace AccommodationService.Infrastructure.Services
 {
@@ -18,15 +20,15 @@ namespace AccommodationService.Infrastructure.Services
     {
         private readonly AccommodationContext _dbContext;
 
-        IRabbitMQProducer<ReservationRequestDto> _rabbitMQProducer;
+        IRabbitMQProducer<TransactionRequestDto> _producerForTransactionRequest;
 
-        IRabbitMQProducer<string> _rabbitMQProducer1;
+        IRabbitMQProducer<TransactionResponseDto> _producerForTransactionResponse;
 
-        public AccommodationServiceImpl(AccommodationContext dbContext, IRabbitMQProducer<ReservationRequestDto> rabbitMQProducer, IRabbitMQProducer<string>rabbitMQProducer1)
+        public AccommodationServiceImpl(AccommodationContext dbContext, IRabbitMQProducer<TransactionRequestDto> producerForTransactionRequest, IRabbitMQProducer<TransactionResponseDto> producerForTransactionResponse)
         {
             _dbContext = dbContext;
-            _rabbitMQProducer = rabbitMQProducer;
-            _rabbitMQProducer1 = rabbitMQProducer1;
+            _producerForTransactionRequest = producerForTransactionRequest;
+            _producerForTransactionResponse = producerForTransactionResponse;
         }
 
         public Task<ReviewDto> CreateReview(ReviewDto reviewDto)
@@ -54,26 +56,71 @@ namespace AccommodationService.Infrastructure.Services
         {
             return await _dbContext.GetMyAccommodationsAsync(userId);
         }
-        public async Task<Task> HandleMessageAsync<T>(T message, string queueName)
+        public async Task HandleMessageAsync<T>(T message, string queueName)
         {
-            var messageJson = JsonSerializer.Serialize(message);
 
-            Console.WriteLine($"Received message from queue: {queueName}");
-            Console.WriteLine("Message content:");
-            Console.WriteLine(messageJson);
-            if (queueName == "transaction_request" && message is ReservationRequestDto reservationRequest)
+            if (queueName == "transaction_request")
             {
-                 var accommodation = await GetAccommodationByIdAsync(reservationRequest.AccommodationId);
-                 if(accommodation == null)
-                 {
-                    await _rabbitMQProducer1.PublishMessageAsync("Accommodation with this id does not exist.","transaction_failed");
-                 }
-                 else
-                 {
-                await _rabbitMQProducer.PublishMessageAsync(reservationRequest, "reservation_request");
-                 }
+                await TransactionRequestAsync(message, "transaction_request");
+                return;
             }
-            return Task.CompletedTask;
+            else if (queueName == "reservation_failed")
+            {
+                await TransactionFailedAsync(message, "reservation_failed");
+                return;
+            }
+            else
+            {
+                await TransactionSuccessAsync(message, "reservation_success");
+                return;
+            }
+        }
+        private async Task TransactionRequestAsync<T>(T message, string queueName)
+        {
+            var reservationRequest = message as TransactionRequestDto;
+            {
+                var accommodation = await GetAccommodationByIdAsync(reservationRequest.AccommodationId);
+                if (accommodation == null)
+                {
+                    var failedMessage = new TransactionResponseDto()
+                    {
+                        Message = "\"Accommodation with this id does not exist.",
+                        TransactionId = reservationRequest.TransactionId
+                    };
+                    await _producerForTransactionResponse.PublishMessageAsync(failedMessage, "transaction_failed");
+                }
+                else
+                {
+                    bool isDateWithinRange = reservationRequest.DateFrom >= accommodation.AvailableFrom &&
+                                             reservationRequest.DateTo <= accommodation.AvailableTo;
+
+                    if (!isDateWithinRange)
+                    {
+                        var failedMessage = new TransactionResponseDto()
+                        {
+                            Message = "The requested dates are out of the accommodation's availability range.",
+                            TransactionId = reservationRequest.TransactionId
+                        };
+                        await _producerForTransactionResponse.PublishMessageAsync(failedMessage, "transaction_failed");
+                    }
+                    else
+                    {
+                        await _producerForTransactionRequest.PublishMessageAsync(reservationRequest, "reservation_request");
+                    }
+                }
+            }
+        }
+        private async Task TransactionSuccessAsync<T>(T message, string queueName)
+        {
+            var transactionResponse = message as TransactionResponseDto;
+            await _producerForTransactionResponse.PublishMessageAsync(transactionResponse, "transaction_success");
+            
+        }
+
+        private async Task TransactionFailedAsync<T>(T message, string queueName)
+        {
+            var transactionResponse = message as TransactionResponseDto;
+            await _producerForTransactionResponse.PublishMessageAsync(transactionResponse, "transaction_failed");
         }
         public async Task<AccommodationDto> InsertAccommodationAsync(AccommodationDto accommodationDto)
         {
@@ -83,9 +130,13 @@ namespace AccommodationService.Infrastructure.Services
 
             return accommodationDto;
         }
-        public AccommodationDto UpdateAccommodation(AccommodationDto accommodationDto)
+
+        public async Task<AccommodationDto> UpdateAccommodationAsync(AccommodationDto accommodationDto)
         {
-            throw new NotImplementedException();
+            Accommodation accommodation = AccommodationDto.MapDtoToAccommodation(accommodationDto);
+            accommodation.Id = new MongoDB.Bson.ObjectId(accommodationDto.Id);
+            await _dbContext.UpdateAccommodationAsync(accommodation);
+            return accommodationDto;
         }
     }
 }

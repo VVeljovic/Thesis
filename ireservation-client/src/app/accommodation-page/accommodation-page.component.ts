@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AccommodationService } from '../services/accommodation.service';
 
 @Component({
@@ -13,7 +13,7 @@ import { AccommodationService } from '../services/accommodation.service';
 export class AccommodationPageComponent {
   id: string ='';
   accommodation :any;
-  constructor(private route: ActivatedRoute, private accommodationService:AccommodationService) {
+  constructor(private route: ActivatedRoute, private accommodationService:AccommodationService, private router: Router) {
     this.id = this.route.snapshot.paramMap.get('id') ?? '';
     
    this.accommodationService.getAccommodation(this.id).subscribe((response)=>{console.log(response)
@@ -21,7 +21,10 @@ export class AccommodationPageComponent {
     this.accommodation = response;
    })
   }
-
+  navigate()
+  {
+    this.router.navigate([`reservation/${this.id}`]);
+  }
   ngOnInit(): void {
 
   }

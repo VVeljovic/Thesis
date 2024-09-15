@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +10,8 @@ namespace AccommodationService.Domain.Models
 {
     public class Amenity
     {
+        [BsonId]
+        public ObjectId Id { get; set; }
         public bool? Parking { get; set; }
 
         public bool? WiFi { get; set; }

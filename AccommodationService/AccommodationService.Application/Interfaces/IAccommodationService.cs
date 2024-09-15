@@ -11,9 +11,7 @@ namespace AccommodationService.Application.Interfaces
     {
 
         public  Task<AccommodationDto> InsertAccommodationAsync(AccommodationDto accommodationDto);
-        
-        public AccommodationDto UpdateAccommodation(AccommodationDto accommodationDto);
-
+   
         public void DeleteAccommodation(string id);
 
         public Task<AccommodationDto> GetAccommodationByIdAsync(string id);
@@ -24,6 +22,8 @@ namespace AccommodationService.Application.Interfaces
 
         public Task<ReviewDto> CreateReview(ReviewDto reviewDto);
 
-        public Task<Task> HandleMessageAsync<T>(T message, string queueName);
+        public Task HandleMessageAsync<T>(T message, string queueName);
+
+        public Task<AccommodationDto> UpdateAccommodationAsync(AccommodationDto accommodationDto);
     }
 }

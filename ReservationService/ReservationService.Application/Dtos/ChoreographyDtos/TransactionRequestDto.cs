@@ -3,8 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-    public class ReservationRequestDto
+using System.Transactions;
+
+namespace AccommodationService.Application.Dtos
+{
+    public class TransactionRequestDto
     {
+        public string TransactionId { get; set; }
+
         public DateTime Date { get; set; }
 
         public double TotalAmount { get; set; }
@@ -20,4 +26,8 @@ using System.Threading.Tasks;
         public DateTime DateFrom { get; set; }
 
         public DateTime DateTo { get; set; }
+
+        public string ReservationId { get; set; }
+
     }
+}

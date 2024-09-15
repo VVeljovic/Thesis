@@ -49,7 +49,7 @@ namespace AccommodationService.Application.Dtos
                 AvailableTo = acommodationDto.AvailableTo,
                 Photos = acommodationDto.Photos,
                 UserId = acommodationDto.UserId,
-               // Amenity = acommodationDto.Amenity,
+                Amenity = AmenityDto.MapToAmenity(acommodationDto.Amenity),
                 Location = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(
                     new GeoJson2DGeographicCoordinates(acommodationDto.Longitude, acommodationDto.Latitude))
 
@@ -70,7 +70,7 @@ namespace AccommodationService.Application.Dtos
                 Photos = accommodation.Photos,
                 UserId = accommodation.UserId,
                 NumberOfGuests = accommodation.NumberOfGuests,
-                //Amenity = accommodation.Amenity,
+                //Amenity = AmenityDto.MapToAmenityDto(accommodation.Amenity),
                 Longitude = accommodation.Location.Coordinates.Longitude,
                 Latitude = accommodation.Location.Coordinates.Latitude
 

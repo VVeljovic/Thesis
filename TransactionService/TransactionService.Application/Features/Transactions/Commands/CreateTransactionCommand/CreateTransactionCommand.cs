@@ -11,6 +11,7 @@ namespace TransactionService.Application.Features.Transactions.Commands.CreateTr
 {
     public class CreateTransactionCommand : IRequest<CreateTransactionCommand>
     {
+
         public DateTime Date { get; set; }
 
         public double TotalAmount { get; set; }
@@ -36,7 +37,9 @@ namespace TransactionService.Application.Features.Transactions.Commands.CreateTr
                 Status = createTransactionCommand.Status,
                 UserId = createTransactionCommand.UserId,
                 AccommodationId = createTransactionCommand.AccommodationId,
-                Type = createTransactionCommand.Type
+                Type = createTransactionCommand.Type,
+                DateFrom=createTransactionCommand.DateFrom,
+                DateTo=createTransactionCommand.DateTo         
             };
         }
     }

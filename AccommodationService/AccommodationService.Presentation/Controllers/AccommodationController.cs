@@ -53,5 +53,12 @@ namespace AccommodationService.Presentation.Controllers
             var accommodationsDto = await _accommodationService.GetMyAccommodationsAsync(userId);
             return Ok(accommodationsDto);
         }
+
+        [HttpPut("update-accommodation")]
+        public async Task<IActionResult> UpdateAccommodationAsync([FromBody]AccommodationDto accommodationDto)
+        {
+            var accommodation = await _accommodationService.UpdateAccommodationAsync(accommodationDto);
+            return Ok(accommodation);
+        }
     }
 }

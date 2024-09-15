@@ -35,5 +35,12 @@ namespace TransactionService.Infrastructure.MongoDb
             await Transactions.InsertOneAsync(transaction);
             return transaction;
         }
+
+        public async Task UpdateTransactionStatusAsync(string transactionId, string newStatus)
+        {
+            var filter = Builders<Transaction>.Filter.Eq(a => a.Id , new MongoDB.Bson.ObjectId(transactionId));
+            var update = Builders<Transaction>.Update.Set(a => a.Status, newStatus);
+            await Transactions.UpdateOneAsync(filter, update);
+        }
     }
 }

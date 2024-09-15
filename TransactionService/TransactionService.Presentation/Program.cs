@@ -3,6 +3,7 @@ using TransactionService.Infrastructure.Services;
 using TransactionService.Application.InversionOfControl;
 using TransactionService.Infrastructure.InversionOfControl;
 using TransactionService.Infrastructure.MongoDb;
+using TransactionService.Application.Dtos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +17,7 @@ var mongoDbSettings = builder.Configuration.GetSection("MongoDbSettings").Get<Mo
 builder.Services.AddSingleton(mongoDbSettings);
 builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();
-builder.Services.AddHostedService<RabbitMQConsumerHostedService<string>>();
-var app = builder.Build();
+builder.Services.AddHostedService<RabbitMQConsumerHostedService<TransactionResponseDto>>(); var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

@@ -23,5 +23,9 @@ namespace TransactionService.Domain.Entities
 
         public string AccommodationId { get; set; }
 
+        public DateTime DateFrom { get; set; }
+
+        public DateTime DateTo { get; set; }
+
     }
 }

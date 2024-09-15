@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AccommodationService.Application.Dtos
+namespace AccommodationService.Application.Dtos.ChoreographyDtos
 {
-    public class ReservationRequestDto
+    public class TransactionRequestDto
     {
+        public string? TransactionId { get; set; }
+
         public DateTime Date { get; set; }
 
         public double TotalAmount { get; set; }
@@ -23,5 +25,7 @@ namespace AccommodationService.Application.Dtos
         public DateTime DateFrom { get; set; }
 
         public DateTime DateTo { get; set; }
+        public string ReservationId { get; set; } = "";
+
     }
 }
