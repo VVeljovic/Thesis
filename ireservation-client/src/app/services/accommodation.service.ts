@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { Accommodation } from '../models/accommodation';
+import { Review } from '../models/review';
 
 @Injectable({
   providedIn: 'root'
@@ -63,5 +64,9 @@ export class AccommodationService {
   {
     console.log(id);
      return this.httpClient.get(`http://localhost:5153/Accommodation/get-accommodation-by-id/${id}`);
+  }
+  createReview(review:Review)
+  {
+    return this.httpClient.post(`http://localhost:5153/api/Review`,review);
   }
 }

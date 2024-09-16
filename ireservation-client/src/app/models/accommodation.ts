@@ -1,4 +1,5 @@
 import { Amenity } from "./amenity";
+import { Review } from "./review";
 
 export interface Accommodation {
     propertyName: string;
@@ -13,4 +14,5 @@ export interface Accommodation {
     amenity: Amenity; 
     longitude: number;
     latitude : number;
+    reviews? : Review[];
   }

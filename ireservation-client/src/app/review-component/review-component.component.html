@@ -1,0 +1,33 @@
+        
+
+
+<div class="review_section">
+    <div class="review-header">
+        <h2>Add Review</h2>
+        <button id="review-add-btn" aria-label="add review" title="Add Review" class="add-review-btn" (click)="addReview()">+</button>
+    </div>
+
+    <div class="blog-card" *ngFor="let review of accommodation?.reviews">
+        <div class="meta">
+          <img class="photo" src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1726444800&semt=ais_hybrid">
+        </div>
+        <div class="description">
+          <h1>{{ review.userId }}</h1>
+          <span class="fa fa-star" *ngFor="let star of [].constructor(review.rating); let i = index" [ngClass]="{'checked': true}"></span>
+          <span class="fa fa-star" *ngFor="let star of [].constructor(5 - review.rating); let i = index" [ngClass]="{'checked': false}"></span>
+          <br>
+          <h2>{{ review.dateCreated | date:'yyyy-MM-dd'}}</h2>
+          <p> {{review.comment}}</p>
+
+        </div>
+      </div>
+
+  <br>
+    
+      
+      
+      
+
+ 
+      
+</div> <!--Review Section ends here-->

@@ -41,10 +41,16 @@ namespace AccommodationService.Infrastructure.MongoDb
             if (accommodation != null)
             {
                 await Reviews.InsertOneAsync(review);
+
+                if (accommodation.LastFiveReviews.Count >= 5)
+                {
+                    accommodation.LastFiveReviews.RemoveAt(accommodation.LastFiveReviews.Count - 1);
+                }
+
                 accommodation.LastFiveReviews.Insert(0, review);
 
                 var update = Builders<Accommodation>.Update
-                .Set(a => a.LastFiveReviews, accommodation.LastFiveReviews);
+                    .Set(a => a.LastFiveReviews, accommodation.LastFiveReviews);
 
                 await Accommodations.UpdateOneAsync(
                     a => a.Id == accommodation.Id,

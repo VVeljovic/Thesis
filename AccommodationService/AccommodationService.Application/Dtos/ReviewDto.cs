@@ -32,5 +32,18 @@ namespace AccommodationService.Application.Dtos
             
         }
 
+        public static ReviewDto MapReviewToReviewDto(Review review)
+        {
+            return new ReviewDto()
+            {
+                UserId = review.UserId,
+                AccommodationId = review.AccommodationId,
+                Rating = review.Rating,
+                Comment = review.Comment,
+                DateCreated = review.DateCreated
+            };
+
+        }
+
     }
 }

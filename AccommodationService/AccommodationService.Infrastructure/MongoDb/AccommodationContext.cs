@@ -60,7 +60,23 @@ namespace AccommodationService.Infrastructure.MongoDb
             var filter = Builders<Accommodation>.Filter.Eq(accommodation => accommodation.Id, objectId);
             var accommodation = await Accommodations.Find(filter).FirstOrDefaultAsync();
             if (accommodation != null)
-                return AccommodationDto.MapAccommodationToDto(accommodation);
+            {
+                var accommodationDto = AccommodationDto.MapAccommodationToDto(accommodation);
+                var amenity = await Amenities.Find(a => a.Id == accommodation.AmenityId).FirstOrDefaultAsync();
+                if (amenity != null)
+                {
+                    accommodationDto.Amenity = AmenityDto.MapToAmenityDto(amenity);
+                }
+                if (accommodation.LastFiveReviews != null && accommodation.LastFiveReviews.Any())
+                {
+                    accommodationDto.Reviews = accommodation.LastFiveReviews
+                        .Select(review => ReviewDto.MapReviewToReviewDto(review))
+                        .ToList();
+                }
+
+                return accommodationDto;
+            };
+        
             return null;
         }
 
@@ -84,7 +100,7 @@ namespace AccommodationService.Infrastructure.MongoDb
                 var addressFilter = Builders<Accommodation>.Filter.Regex(a => a.Address, new MongoDB.Bson.BsonRegularExpression(address, "i"));
                 filter = Builders<Accommodation>.Filter.And(filter, addressFilter);
             }
-            if (numberOfGuests != null && numberOfGuests !=0)
+            if (numberOfGuests != null && numberOfGuests != 0)
             {
                 var numberOfGuestsFilter = Builders<Accommodation>.Filter.Eq("NumberOfGuests", numberOfGuests);
                 filter = Builders<Accommodation>.Filter.And(filter, numberOfGuestsFilter);
@@ -116,7 +132,7 @@ namespace AccommodationService.Infrastructure.MongoDb
                 var dto = AccommodationDto.MapAccommodationToDto(accommodation);
                 if (amenityDict.TryGetValue(accommodation.AmenityId, out var amenity))
                 {
-                    dto.Amenity = AmenityDto.MapToAmenityDto(amenity); 
+                    dto.Amenity = AmenityDto.MapToAmenityDto(amenity);
                 }
                 return dto;
             });
@@ -145,7 +161,7 @@ namespace AccommodationService.Infrastructure.MongoDb
                 .Set(a => a.AvailableTo, updatedAccommodation.AvailableTo)
                 .Set(a => a.Photos, updatedAccommodation.Photos)
                 .Set(a => a.UserId, updatedAccommodation.UserId)
-                
+
                 .Set(a => a.Location, updatedAccommodation.Location)
                 .Set(a => a.LastFiveReviews, updatedAccommodation.LastFiveReviews);
 

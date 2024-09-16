@@ -4,7 +4,7 @@
     
 }
 body {
-    background-color: rgb(227,226,227);
+    background-color: hsla(0, 2%, 53%, 0.151);
 }
 .wrapper {
     display: flex;

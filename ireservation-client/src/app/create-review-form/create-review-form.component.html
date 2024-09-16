@@ -1,0 +1,59 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
+    <title>Form Reviews</title>
+  </head>
+  
+    <div class="wrapper">
+      <h3>Lorem ipsum dolor sit amet.</h3>
+      <!-- Form with ngSubmit and a template reference variable for form validation -->
+      <form #reviewForm="ngForm" (ngSubmit)="submitReview()">
+        
+        <div class="rating">
+          <!-- Generate star icons with ngFor and click event to set rating -->
+          <i 
+            *ngFor="let star of stars; let i = index"
+            class="bx"
+            [ngClass]="{
+              'bxs-star': star,
+              'bx-star': !star
+            }"
+            (click)="selectStar(i)"
+            style="--i: {{i}}">
+          </i>
+        </div>
+  
+        <!-- Hidden input to store rating value -->
+        <input type="number" name="rating" [(ngModel)]="ratingValue" hidden>
+  
+        <!-- Text area for the user's opinion with two-way data binding and validation -->
+        <textarea 
+      name="opinion" 
+      [(ngModel)]="opinion" 
+      cols="30" 
+      rows="5" 
+      placeholder="Your opinion..." 
+      required>
+    </textarea>
+  
+    <div class="btn-group">
+        <button 
+          type="submit" 
+          class="btn submit" 
+          [disabled]="!reviewForm.form.valid">
+          Submit
+        </button>
+          <!-- Cancel button that resets the form -->
+          <button 
+          type="button" 
+          class="btn cancel" 
+          (click)="reviewForm.resetForm()">
+          Cancel
+        </button>
+        </div>
+        
+      </form>
+    </div>
+  
+  

@@ -36,6 +36,8 @@ namespace AccommodationService.Application.Dtos
 
         public AmenityDto Amenity { get; set; }
 
+        public List<ReviewDto> Reviews { get; set; }
+
         public static Accommodation MapDtoToAccommodation(AccommodationDto acommodationDto)
         {
             return new Accommodation
