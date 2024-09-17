@@ -31,7 +31,7 @@ export class MainPageComponent {
       navigator.geolocation.getCurrentPosition(position => {
         this.currLat = position.coords.latitude;
         this.currLong = position.coords.longitude;
-        accommodationService.getAccommodations(this.currLong, this.currLat, 1, this.currentPage).subscribe((response) => {
+        accommodationService.getAccommodations(this.currLong, this.currLat, 6, this.currentPage).subscribe((response) => {
           this.accommodations = response
           console.log(response)
 
@@ -78,7 +78,7 @@ export class MainPageComponent {
     this.accommodationService.getAccommodations(
       this.currLong,
       this.currLat,
-      1,
+      6,
       this.currentPage,
       this.destination,
       this.checkInDate,

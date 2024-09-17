@@ -111,7 +111,8 @@ export class CreateFormComponent {
           amenity: amenity, 
           latitude:this.latitude,
           longitude:this.longitude,
-          userId:this.userId
+          userId:this.userId,
+          reviews : []
         };
         this.accommodationService.createAccomodation(accommodation).subscribe((response)=>{
           console.log(response)
