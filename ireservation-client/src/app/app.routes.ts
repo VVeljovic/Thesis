@@ -6,6 +6,7 @@ import { CreateFormComponent } from './create-form/create-form.component';
 import { BookAccommodationFormComponent } from './book-accommodation-form/book-accommodation-form.component';
 import { ReviewComponentComponent } from './review-component/review-component.component';
 import { CreateReviewFormComponent } from './create-review-form/create-review-form.component';
+import { CreditCardComponent } from './credit-card/credit-card.component';
 
 export const routes: Routes = [
     { path: 'createAccommodation', component: CreateFormComponent }, 
@@ -14,5 +15,6 @@ export const routes: Routes = [
     {path: 'reservation/:id',component:BookAccommodationFormComponent},
     {path:'review',component:ReviewComponentComponent},
     {path:'createReview',component:CreateReviewFormComponent},
+    {path:'creditCard', component:CreditCardComponent}
 
 ];

@@ -60,4 +60,16 @@ public class StripeService : IStripeService
           createdPayment.Amount,
           createdPayment.Id);
     }
+    public async Task<Customer> GetCustomerByEmailAsync(string email, CancellationToken ct)
+    {
+        var options = new CustomerListOptions
+        {
+            Email = email,
+            Limit = 1 
+        };
+
+        var customers = await _customerService.ListAsync(options, null, ct);
+
+        return  customers.Data.FirstOrDefault(); 
+    }
 }

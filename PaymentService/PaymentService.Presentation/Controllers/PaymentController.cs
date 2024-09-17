@@ -57,6 +57,28 @@ public class PaymentController : ControllerBase
             return StatusCode(500, $"Internal error: {ex.Message}");
         }
     }
+    [HttpGet("email")]
+    public async Task<IActionResult> GetCustomerByEmailAsync([FromQuery] string email, CancellationToken ct)
+    {
+        if (string.IsNullOrEmpty(email))
+        {
+            return BadRequest("Email is required.");
+        }
+
+        var customer = await _stripeService.GetCustomerByEmailAsync(email, ct);
+
+        if (customer == null)
+        {
+            return NotFound("Customer not found.");
+        }
+
+        return Ok(new
+        {
+            Id = customer.Id,
+            Name = customer.Name,
+            Email = customer.Email
+        });
+    }
 
 
 }
