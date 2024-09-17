@@ -10,4 +10,8 @@
     <ProjectReference Include="..\PaymentService.Domain\PaymentService.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Stripe.Net" Version="45.13.0" />
+  </ItemGroup>
+
 </Project>
