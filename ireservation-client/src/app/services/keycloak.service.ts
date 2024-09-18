@@ -21,7 +21,7 @@ export class KeycloakService {
   }
   constructor() { }
   async init() {
-    console.log('Authentication the user...')
+    console.log('Authentication the user...'+window.location.href)
     const authenticated = await this.keycloak?.init({
       onLoad: 'login-required',
     })
@@ -29,8 +29,10 @@ export class KeycloakService {
       this._profile = (await this.keycloak?.loadUserProfile()) as UserProfile;
       this._profile.token = this.keycloak?.token;
       const userInfo = await this.keycloak?.loadUserInfo();
+
       localStorage.setItem('token', this._profile.token || '');
-      localStorage.setItem('userInfo', JSON.stringify(userInfo));    }
+      localStorage.setItem('userInfo', JSON.stringify(userInfo));  
+    }
   }
   get profile(): UserProfile | undefined{
     return this._profile;

@@ -8,10 +8,10 @@ import { Observable } from 'rxjs';
 export class PaymentService {
 
   constructor(private httpClient: HttpClient) { }
-  private apiUrl = 'http://localhost:5225/Payment';
+  private apiUrl = 'http://localhost:5225/Payment/get-customer';
   getCustomerByEmail(email: string): Observable<any> {
-    const params = new HttpParams().set('email', email);
-    return this.httpClient.get<any>(`${this.apiUrl}/email`, { params });
+   
+    return this.httpClient.get(`${this.apiUrl}/${email}`);
   }
 }
 

@@ -60,7 +60,7 @@ public class StripeService : IStripeService
           createdPayment.Amount,
           createdPayment.Id);
     }
-    public async Task<Customer> GetCustomerByEmailAsync(string email, CancellationToken ct)
+    public async Task<Customer> GetCustomerByEmailAsync(string email)
     {
         var options = new CustomerListOptions
         {
@@ -68,7 +68,7 @@ public class StripeService : IStripeService
             Limit = 1 
         };
 
-        var customers = await _customerService.ListAsync(options, null, ct);
+        var customers = await _customerService.ListAsync(options, null);
 
         return  customers.Data.FirstOrDefault(); 
     }

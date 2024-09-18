@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { KeycloakService } from '../services/keycloak.service';
 import { Router } from '@angular/router';
+import { PaymentService } from '../services/payment.service';
 
 @Component({
   selector: 'app-navbar',
@@ -10,9 +11,10 @@ import { Router } from '@angular/router';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
-  constructor(private keycloakService : KeycloakService, private router : Router)
+  constructor(private keycloakService : KeycloakService, private router : Router, private paymentService : PaymentService)
   {
-
+    const obj =   JSON.parse(localStorage.getItem('userInfo') || '{}');
+    this.paymentService.getCustomerByEmail(obj.email).subscribe((response)=>console.log(response))
   }
   logout()
   {
