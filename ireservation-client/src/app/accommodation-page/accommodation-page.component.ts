@@ -46,7 +46,8 @@ export class AccommodationPageComponent {
   }
   navigate()
   {
-    this.router.navigate([`reservation/${this.id}`]);
+    console.log(this.accommodation)
+    this.router.navigate([`reservation/${this.id}`],{queryParams : { accommodation: JSON.stringify(this.accommodation)}});
   }
   ngOnInit(): void {
 

@@ -8,10 +8,10 @@ namespace TransactionService.Presentation.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class TransacationController : ControllerBase
+    public class TransactionController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public TransacationController(IMediator mediator)
+        public TransactionController(IMediator mediator)
         {
             _mediator = mediator;
         }
