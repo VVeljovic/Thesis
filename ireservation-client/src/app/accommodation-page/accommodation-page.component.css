@@ -55,15 +55,15 @@ p {
     background-color: var(--color);
 }
 .pinkbutton:hover {
-    background-color: lightgray;
+    background-color: #d1bbbb;
     color: var(--color)!important;
 }
 .graybutton {
-    background-color: rgb(96, 96, 97);
+    background-color: #FF5A5F;
     padding: 15px 30px 15px 30px;
 }
 .graybutton:hover {
-    background-color: lightgray;
+    background-color: #FF5A5F;
     color: black!important;
 }
 .bold {

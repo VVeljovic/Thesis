@@ -238,7 +238,7 @@
           <textarea formControlName="comments" rows="5" cols="5" id="comments" class="floatLabel" placeholder="Description"></textarea>
           <label for="Comments" *ngIf="bookingForm.get('comments')?.value" class="active">Description</label>
           <app-upload-images (imagesSelected)="onImagesSelected($event)"></app-upload-images>        </div>
-        <button type="submit" class="col-1-4">Submit</button>
+        <button type="submit" class="col-1 formbold-btn" style="text-align: center;">Submit</button>
         </div>
     </div>
 
