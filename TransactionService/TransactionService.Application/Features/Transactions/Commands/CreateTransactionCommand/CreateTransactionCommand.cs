@@ -28,6 +28,8 @@ namespace TransactionService.Application.Features.Transactions.Commands.CreateTr
 
         public DateTime DateTo { get; set; }
 
+        public StripeUserDto StripeUserDto { get; set; }
+
         public static Transaction MapToTransaction(CreateTransactionCommand createTransactionCommand)
         {
             return new Transaction()

@@ -5,15 +5,15 @@ using Stripe;
 [Route("[controller]")]
 public class PaymentController : ControllerBase
 {
-    private readonly IStripeService _stripeService;
+    private readonly IPaymentService _stripeService;
 
-    public PaymentController(IStripeService stripeService)
+    public PaymentController(IPaymentService stripeService)
     {
         _stripeService = stripeService;
     }
 
     [HttpPost("add-customer")]
-    public async Task<IActionResult> AddStripeCustomer([FromBody] AddStripeCustomer request, CancellationToken ct)
+    public async Task<IActionResult> AddStripeCustomer([FromBody] StripeUserDto request)
     {
         if (request == null)
         {
@@ -22,7 +22,7 @@ public class PaymentController : ControllerBase
 
         try
         {
-            var result = await _stripeService.AddStripeCustomerAsync(request, ct);
+            var result = await _stripeService.AddStripeCustomerAsync(request);
             return Ok(result);
         }
         catch (StripeException ex)
@@ -36,7 +36,7 @@ public class PaymentController : ControllerBase
     }
 
     [HttpPost("add-payment")]
-    public async Task<IActionResult> AddStripePayment([FromBody] AddStripePayment request, CancellationToken ct)
+    public async Task<IActionResult> AddStripePayment([FromBody] AddStripePayment request)
     {
         if (request == null)
         {
@@ -45,7 +45,7 @@ public class PaymentController : ControllerBase
 
         try
         {
-            var result = await _stripeService.AddStripePaymentAsync(request, ct);
+            var result = await _stripeService.AddStripePaymentAsync(request);
             return Ok(result);
         }
         catch (StripeException ex)

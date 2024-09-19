@@ -24,12 +24,12 @@ public class ReservationService : IReservationService
 
     public async Task HandleMessageAsync<T>(T message, string queueName)
     {
-        if(queueName == "reservation_request") 
+        if (queueName == "reservation_request")
         {
-             await TransactionRequestAsync(message, "reservation_request");
-               return;
+            await TransactionRequestAsync(message, "reservation_request");
+            return;
         }
-        else if(queueName == "payment_failed")
+        else if (queueName == "payment_failed")
         {
             await TransactionFailedAsync(message, "payment_failed");
             return;
@@ -44,51 +44,53 @@ public class ReservationService : IReservationService
 
     private async Task TransactionRequestAsync<T>(T message, string queueName)
     {
-            var reservationRequest = message as TransactionRequestDto;
-            var reservation = await _reservationContext.FindOneAsync(reservationRequest);
-            if (reservation == null)
+        var reservationRequest = message as TransactionRequestDto;
+        var reservation = await _reservationContext.FindOneAsync(reservationRequest);
+        if (reservation == null)
+        {
+            var reservationEntity = new Reservation()
             {
-                var reservationEntity = new Reservation()
-                {
-                    CheckInDate = reservationRequest.DateFrom,
-                    CheckOutDate = reservationRequest.DateTo,
-                    TotalAmount = reservationRequest.TotalAmount,
-                    Status = "Pending",
-                    AccommodationId = reservationRequest.AccommodationId,
+                CheckInDate = reservationRequest.DateFrom,
+                CheckOutDate = reservationRequest.DateTo,
+                TotalAmount = reservationRequest.TotalAmount,
+                Status = "Pending",
+                AccommodationId = reservationRequest.AccommodationId,
 
-                };
-                await _reservationContext.InsertReservationAsync(reservationEntity);
-                reservationRequest.ReservationId = reservationEntity.Id.ToString();
-                await _producerForTransactionRequest.PublishMessageAsync(reservationRequest, "payment_request");
-            }
-            else
+            };
+            await _reservationContext.InsertReservationAsync(reservationEntity);
+            reservationRequest.ReservationId = reservationEntity.Id.ToString();
+            await _producerForTransactionRequest.PublishMessageAsync(reservationRequest, "payment_request");
+        }
+        else
+        {
+            var transactionFailedMessageDto = new TransactionResponseDto()
             {
-                var transactionFailedMessageDto = new TransactionResponseDto()
-                {
-                    TransactionId = reservationRequest.TransactionId,
-                    Message = "The accommodation is already booked for the selected dates.",
-                    TransactionStatus = "Failed"
+                TransactionId = reservationRequest.TransactionId,
+                Message = "The accommodation is already booked for the selected dates.",
+                TransactionStatus = "Failed"
 
-                };
-                await _producerForTransactionResponse.PublishMessageAsync(transactionFailedMessageDto, "reservation_failed");
-            }
+            };
+            await _producerForTransactionResponse.PublishMessageAsync(transactionFailedMessageDto, "reservation_failed");
+        }
 
     }
 
     private async Task TransactionSuccessAsync<T>(T message, string queueName)
     {
-            var transactionResponse = message as TransactionResponseDto;      
-            transactionResponse.TransactionStatus = "Success";
-            await _reservationContext.UpdateReservationAsync(transactionResponse.ReservationId, transactionResponse.TransactionStatus);
-            await _producerForTransactionResponse.PublishMessageAsync(transactionResponse, "reservation_success");
+        var transactionResponse = message as TransactionResponseDto;
+        transactionResponse.TransactionStatus = "Success";
+        Console.WriteLine(transactionResponse.Message);
+        await _reservationContext.UpdateReservationAsync(transactionResponse.ReservationId, transactionResponse.TransactionStatus);
+        await _producerForTransactionResponse.PublishMessageAsync(transactionResponse, "reservation_success");
     }
 
     private async Task TransactionFailedAsync<T>(T message, string queueName)
     {
-            var transactionResponse = message as TransactionResponseDto;
-            await _reservationContext.UpdateReservationAsync(transactionResponse.ReservationId, transactionResponse.TransactionStatus);
-            transactionResponse.TransactionStatus = "Failed";
-            await _producerForTransactionResponse.PublishMessageAsync(transactionResponse, "reservation_failed");
-        
+        var transactionResponse = message as TransactionResponseDto;
+        Console.WriteLine(transactionResponse.Message);
+        await _reservationContext.UpdateReservationAsync(transactionResponse.ReservationId, transactionResponse.TransactionStatus);
+        transactionResponse.TransactionStatus = "Failed";
+        await _producerForTransactionResponse.PublishMessageAsync(transactionResponse, "reservation_failed");
+
     }
 }

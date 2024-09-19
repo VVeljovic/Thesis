@@ -79,6 +79,7 @@ namespace AccommodationService.Infrastructure.Services
         {
             var reservationRequest = message as TransactionRequestDto;
             {
+                Console.WriteLine(reservationRequest.StripeUserDto.CreditCard.CreditCard);
                 var accommodation = await GetAccommodationByIdAsync(reservationRequest.AccommodationId);
                 if (accommodation == null)
                 {

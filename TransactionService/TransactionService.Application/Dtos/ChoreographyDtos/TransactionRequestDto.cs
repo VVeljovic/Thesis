@@ -30,6 +30,7 @@ namespace TransactionService.Application.Dtos
 
         public string ReservationId { get; set; } = "";
 
+        public StripeUserDto StripeUserDto { get; set; }
 
         public static TransactionRequestDto MapToTransactionRequestDto(Transaction transaction)
         {

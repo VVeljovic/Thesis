@@ -29,5 +29,8 @@ namespace AccommodationService.Application.Dtos
 
         public string ReservationId { get; set; }
 
+        public StripeUserDto StripeUserDto { get; set; }
+
+
     }
 }
