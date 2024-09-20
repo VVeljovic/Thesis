@@ -10,6 +10,6 @@ namespace TransactionService.Application.Interfaces
     public interface ITransactionService
     {
         public Task CreateTransaction(CreateTransactionCommand createTransactionCommand);
-        public Task HandleMessageAsync<T>(T message, string queueName);
+        public Task<string> HandleMessageAsync<T>(T message, string queueName);
     }
 }

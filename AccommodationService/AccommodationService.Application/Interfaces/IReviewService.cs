@@ -11,6 +11,6 @@ namespace AccommodationService.Application.Interfaces
     {
         public Task<ReviewDto> CreateReviewAsync(ReviewDto reviewDto);
 
-        public Task<IEnumerable<ReviewDto>> GetReviewsFromAccommodationAsync();
+        public Task<IEnumerable<ReviewDto>> GetReviewsFromAccommodationAsync(string accommodationId, int pageSize, int pageNumber);
     }
 }

@@ -20,9 +20,9 @@ namespace AccommodationService.Infrastructure.Services
             return reviewDto;
         }
 
-        public Task<IEnumerable<ReviewDto>> GetReviewsFromAccommodationAsync()
+        public async Task<IEnumerable<ReviewDto>> GetReviewsFromAccommodationAsync(string accommodationId, int pageSize, int pageNumber)
         {
-            throw new NotImplementedException();
+          return await _reviewDbContext.GetReviewsFromAccommodationAsync(accommodationId,pageSize,pageNumber);
         }
     }
 }

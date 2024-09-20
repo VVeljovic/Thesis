@@ -21,7 +21,7 @@ ul {
   display: flex;
   padding: 10px 20px;
   border-radius: 50px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 15px#FF5A5F;
 }
 
 ul li {
@@ -40,14 +40,14 @@ ul li.pageNumber {
 ul li a {
   display: block;
   text-decoration: none;
-  color: #383838;
+  color: #FF5A5F;
   font-weight: 600;
   border-radius: 50%;
 }
 
 ul li.pageNumber:hover ,
 ul li.pageNumber.active  {
-  background: #383838;
+  background: #FF5A5F;
   color: #fff;
 }
 

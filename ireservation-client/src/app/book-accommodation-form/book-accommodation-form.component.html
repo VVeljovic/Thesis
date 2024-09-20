@@ -8,13 +8,13 @@
         <div class="w-full sm:w-half formbold-px-3">
           <div class="formbold-mb-5">
             <label for="fName" class="formbold-form-label"> First Name </label>
-            <input type="text" name="fName" id="fName" placeholder="First Name" class="formbold-form-input" />
+            <input type="text" name="fName" id="fName" placeholder="First Name" class="formbold-form-input" [(ngModel)]="obj.given_name" disabled="true"/>
           </div>
         </div>
         <div class="w-full sm:w-half formbold-px-3">
           <div class="formbold-mb-5">
             <label for="lName" class="formbold-form-label"> Last Name </label>
-            <input type="text" name="lName" id="lName" placeholder="Last Name" class="formbold-form-input" />
+            <input type="text" name="lName" id="lName" placeholder="Last Name" class="formbold-form-input" [(ngModel)]="obj.family_name" disabled="true"/>
           </div>
         </div>
       </div>
@@ -23,7 +23,7 @@
         <label for="guest" class="formbold-form-label">
           How many guest are you bringing?
         </label>
-        <input type="number" name="totalAmount" id="totalAmount" placeholder="5" class="formbold-form-input" [(ngModel)]="numberOfGuests" (change)="numberOfGuestChanged()"/>
+        <input type="number" name="totalAmount" id="totalAmount" class="formbold-form-input" [(ngModel)]="numberOfGuests" (change)="numberOfGuestChanged()"/>
       </div>
       
         
@@ -31,14 +31,14 @@
         <div class="w-full sm:w-half formbold-px-3">
           <div class="formbold-mb-5 w-full">
             <label for="date" class="formbold-form-label">Check in date</label>
-            <input type="date" name="date" id="date" class="formbold-form-input"[(ngModel)]="checkInDate" />
+            <input type="date" name="date" id="date" class="formbold-form-input"[(ngModel)]="checkInDate" [min]="minDate" [max]="maxDate" (change)="newTotalAmount()"/>
           </div>
         </div>
         
         <div class="w-full sm:w-half formbold-px-3">
           <div class="formbold-mb-5 w-full">
             <label for="date" class="formbold-form-label">Check out date</label>
-            <input type="date" name="date" id="date" class="formbold-form-input" [(ngModel)]="checkOutDate"/>
+            <input type="date" name="date" id="date" class="formbold-form-input" [(ngModel)]="checkOutDate" [min]="minDate" [max]="maxDate"(change)="newTotalAmount()"/>
           </div>
         </div>
       </div>
@@ -46,7 +46,7 @@
         <label for="guest" class="formbold-form-label">
          Total amount
         </label>
-        <input type="number" name="guest" id="guest" placeholder="5" class="formbold-form-input" disabled="true"[(ngModel)]="totalAmount" /></div>
+        <input type="text" name="guest" id="guest"  class="formbold-form-input" disabled="true" [(ngModel)]="totalAmountDisplay"/></div>
       <div class="flex formbold-mb-5">
         <div class="flex">
           <input type="radio" name="radio1" id="radioButton1" class="formbold-radio" />

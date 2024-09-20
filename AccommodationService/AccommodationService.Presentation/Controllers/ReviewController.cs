@@ -21,5 +21,12 @@ namespace AccommodationService.Presentation.Controllers
             var result = await _reviewService.CreateReviewAsync(reviewDto);
             return Ok(result);
         }
+
+         [HttpGet("get-reviews/{accommodationId}/{pageSize}/{pageNumber}")]
+        public async Task<IActionResult> GetReviewsAsync(string accommodationId, int pageSize, int pageNumber)
+        {
+            var reviewsDto = await _reviewService.GetReviewsFromAccommodationAsync(accommodationId,pageSize,pageNumber);
+            return Ok(reviewsDto);
+        }
     }
 }

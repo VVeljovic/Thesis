@@ -2,7 +2,7 @@ using MongoDB.Bson;
 
 public class Reservation
 {
-    public ObjectId Id { get; set;}
+    public ObjectId Id { get; set; }
 
     public DateTime CheckInDate { get; set; }
 
@@ -13,4 +13,6 @@ public class Reservation
     public string Status { get; set; }
 
     public string AccommodationId { get; set; }
+
+    public string UserId { get; set; }
 }

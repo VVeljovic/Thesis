@@ -37,6 +37,10 @@ export class KeycloakService {
   get profile(): UserProfile | undefined{
     return this._profile;
   }
+  userProfile()
+  {
+    this.keycloak?.accountManagement();
+  }
   login()
   {
     return this.keycloak?.login();

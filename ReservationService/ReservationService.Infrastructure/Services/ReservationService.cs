@@ -93,4 +93,10 @@ public class ReservationService : IReservationService
         await _producerForTransactionResponse.PublishMessageAsync(transactionResponse, "reservation_failed");
 
     }
+
+
+    async Task<IEnumerable<ReservationDto>> IReservationService.GetReservationsByUserId(string userId, int pageSize=5, int pageNumber=1, string status="Pending")
+    {
+        return await _reservationContext.GetReservationsByUserIdAsync(userId,pageSize,pageNumber,status);
+    }
 }

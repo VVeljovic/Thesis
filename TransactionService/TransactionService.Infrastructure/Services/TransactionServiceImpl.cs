@@ -32,32 +32,33 @@ namespace TransactionService.Infrastructure.Services
             transactionRequest.StripeUserDto = createTransactionCommand.StripeUserDto;
             await _rabbitMQPublisher.PublishMessageAsync(transactionRequest, "transaction_request");
         }
-        public async Task HandleMessageAsync<T>(T message, string queueName)
+        public async Task<string> HandleMessageAsync<T>(T message, string queueName)
         {
             if (queueName == "transaction_failed")
             {
-                await TransactionFailedAsync(message, "transaction_failed");
-                return;
+                return await TransactionFailedAsync(message, "transaction_failed");
+                
             }
             else
             {
-                await TransactionSuccessAsync(message, "transaction_success");
-                return;
+                return await TransactionSuccessAsync(message, "transaction_success");
+               
             }
         }
-        private async Task TransactionSuccessAsync<T>(T message, string queueName)
+        private async Task<string> TransactionSuccessAsync<T>(T message, string queueName)
         {
-            var transactionFailedMessageDto = message as TransactionResponseDto;
-            Console.WriteLine(transactionFailedMessageDto.Message);
-            await _transactionDbContext.UpdateTransactionStatusAsync(transactionFailedMessageDto.TransactionId, transactionFailedMessageDto.TransactionStatus);
-
+            var transactionSuccessMessageDto = message as TransactionResponseDto;
+            Console.WriteLine(transactionSuccessMessageDto.Message);
+            await _transactionDbContext.UpdateTransactionStatusAsync(transactionSuccessMessageDto.TransactionId, transactionSuccessMessageDto.TransactionStatus);
+            return transactionSuccessMessageDto.Message;
         }
 
-        private async Task TransactionFailedAsync<T>(T message, string queueName)
+        private async Task<string> TransactionFailedAsync<T>(T message, string queueName)
         {
             var transactionFailedMessageDto = message as TransactionResponseDto;
             Console.WriteLine(transactionFailedMessageDto.Message);
             await _transactionDbContext.UpdateTransactionStatusAsync(transactionFailedMessageDto.TransactionId, transactionFailedMessageDto.TransactionStatus);
+            return transactionFailedMessageDto.Message;
         }
     }
 }

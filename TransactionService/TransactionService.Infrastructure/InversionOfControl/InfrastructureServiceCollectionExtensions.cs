@@ -39,6 +39,7 @@ namespace TransactionService.Infrastructure.InversionOfControl
                 });
                 services.AddSingleton(typeof(IRabbitMQConsumer<>), typeof(RabbitMQConsumer<>));
                 services.AddScoped(typeof(IRabbitMQProducer<>), typeof(RabbitMQProducer<>));
+                
                 return services;
             }
         }

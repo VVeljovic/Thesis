@@ -14,7 +14,7 @@ export class NavbarComponent {
   constructor(private keycloakService : KeycloakService, private router : Router, private paymentService : PaymentService)
   {
     const obj =   JSON.parse(localStorage.getItem('userInfo') || '{}');
-    this.paymentService.getCustomerByEmail(obj.email).subscribe((response)=>console.log(response))
+    //this.paymentService.getCustomerByEmail(obj.email).subscribe((response)=>console.log(response))
   }
   logout()
   {
@@ -23,5 +23,9 @@ export class NavbarComponent {
   redirect(url : string)
   {
     this.router.navigate([url]);
+  }
+  profile()
+  {
+    this.keycloakService.userProfile();
   }
 }

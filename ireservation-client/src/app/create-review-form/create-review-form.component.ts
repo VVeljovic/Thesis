@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Review } from '../models/review';
 import { UserProfile } from '../models/userprofile';
 import { AccommodationService } from '../services/accommodation.service';
@@ -19,7 +19,7 @@ export class CreateReviewFormComponent {
   opinion: string = '';
   user!:any ;
   accommodation!:any;
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private accommdationService : AccommodationService) 
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private accommdationService : AccommodationService, private matDialogRef : MatDialogRef<CreateReviewFormComponent>) 
   {
     this.accommodation = data.accommodation;
     console.log(this.accommodation);
@@ -52,7 +52,7 @@ export class CreateReviewFormComponent {
     } ;
     console.log(review);
     this.accommdationService.createReview(review).subscribe((response)=>{
-      console.log(response);
+      this.matDialogRef.close(); window.location.reload();
     })
   }
 }

@@ -4,11 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AccommodationService } from '../services/accommodation.service';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { ReviewComponentComponent } from '../review-component/review-component.component';
+import { PaginationComponent } from '../pagination/pagination.component';
 
 @Component({
   selector: 'app-accommodation-page',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, ReviewComponentComponent],
+  imports: [CommonModule, NavbarComponent, ReviewComponentComponent, PaginationComponent],
   templateUrl: './accommodation-page.component.html',
   styleUrl: './accommodation-page.component.css'
 })
@@ -16,6 +17,7 @@ export class AccommodationPageComponent {
   id: string ='';
   accommodation :any;
   accommodationId: string = '';
+  obj =   JSON.parse(localStorage.getItem('userInfo') || '{}');
   private amenityLabels: { [key: string]: string } = {
     airConditioning: 'Air Conditioning',
     balcony: 'Balcony',
@@ -37,7 +39,7 @@ export class AccommodationPageComponent {
   }
   constructor(private route: ActivatedRoute, private accommodationService:AccommodationService, private router: Router) {
     this.id = this.route.snapshot.paramMap.get('id') ?? '';
-    
+    console.log(this.obj)
    this.accommodationService.getAccommodation(this.id).subscribe((response)=>{console.log(response)
 
     this.accommodation = response;

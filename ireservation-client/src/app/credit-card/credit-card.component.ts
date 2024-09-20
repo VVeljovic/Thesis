@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Booking } from '../models/booking';
 import { CreditCard } from '../models/creditcard';
 import { StripeUser } from '../models/stripeuser';
@@ -21,7 +21,7 @@ export class CreditCardComponent {
   cvv :string =''
   formattedCardNumber: string = '';
   formattedExpirationDate: string = '';
-  constructor(@Inject(MAT_DIALOG_DATA) public data:any, private transactionService : TransactionService)
+  constructor(@Inject(MAT_DIALOG_DATA) public data:any, private transactionService : TransactionService, private matDialogRef : MatDialogRef<CreditCardComponent>)
   {
     console.log(data.booking)
   }
@@ -65,6 +65,7 @@ export class CreditCardComponent {
     this.data.booking.stripeUserDto = stripeUser;
     this.transactionService.bookAccommodation(this.data.booking).subscribe((response)=>{
       console.log(response)
+      this.matDialogRef.close();
     }) 
    }
 }

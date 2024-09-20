@@ -69,4 +69,8 @@ export class AccommodationService {
   {
     return this.httpClient.post(`http://localhost:5153/api/Review`,review);
   }
+  getReviews(accommodationId: string, pageSize : number , pageNumber : number)
+  {
+    return this.httpClient.get(`http://localhost:5153/api/Review/get-reviews/${accommodationId}/${pageSize}/${pageNumber}`);
+  }
 }

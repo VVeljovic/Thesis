@@ -19,8 +19,11 @@
                    <div *ngFor="let amenity of getFalseAmenities()">
                     <h3>{{ amenity }}</h3>
                   </div>
-                   <a class="graybutton" style="cursor: pointer;" (click)="navigate()">Book now!</a>
+                   <a class="graybutton" *ngIf="obj.sub != accommodation.userId"style="cursor: pointer;" (click)="navigate()">Book now!</a>
+                   <a *ngIf="obj.sub == accommodation.userId"class="graybutton" style="cursor: pointer;" (click)="navigate()">Update Accommodation</a>
+                   <!-- <a *ngIf="obj.sub == accommodation.userId"class="graybutton" style="cursor: pointer;" (click)="navigate()">Delete Accommodation</a> -->
                 </div>
+                
                 <div class="main-container">
                   <!-- Prvi div za prve 4 slike -->
                   <div class="image-container">
@@ -42,4 +45,5 @@
                 
             </section>
             <app-review-component [accommodation]="accommodation"></app-review-component>
+           
           </body>

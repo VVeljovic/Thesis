@@ -11,6 +11,8 @@ public class CreateReservationCommand : IRequest<CreateReservationCommand>
 
     public string AccommodationId { get; set; }
 
+    public string UserId { get; set; }
+
     public static Reservation MapToReservation(CreateReservationCommand createReservationCommand)
     {
         return new Reservation()
@@ -19,7 +21,8 @@ public class CreateReservationCommand : IRequest<CreateReservationCommand>
             CheckOutDate = createReservationCommand.CheckOutDate,
             TotalAmount = createReservationCommand.TotalAmount,
             Status = createReservationCommand.Status,
-            AccommodationId = createReservationCommand.AccommodationId
+            AccommodationId = createReservationCommand.AccommodationId,
+            UserId = createReservationCommand.UserId
         };
     }
 }

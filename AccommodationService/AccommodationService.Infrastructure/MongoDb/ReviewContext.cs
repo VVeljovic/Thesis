@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AccommodationService.Domain.Models;
 using MongoDB.Driver;
 using MongoDB.Bson;
+using AccommodationService.Application.Dtos;
 
 namespace AccommodationService.Infrastructure.MongoDb
 {
@@ -57,6 +58,18 @@ namespace AccommodationService.Infrastructure.MongoDb
                     update);
             }
             return review;
+        }
+        
+        public async Task<IEnumerable<ReviewDto>> GetReviewsFromAccommodationAsync(string accommodationId, int pageSize, int pageNumber)
+        {
+            var filter = Builders<Review>.Filter.Eq(review => review.AccommodationId , accommodationId);
+            var reviews = await Reviews.Find(filter).Skip((pageNumber-1)*pageSize).Limit(pageSize).SortByDescending(review=>review.DateCreated).ToListAsync();
+            if(reviews.Count > 0)
+            {
+                var reviewsDto = reviews.Select(review=>ReviewDto.MapReviewToReviewDto(review));
+                return reviewsDto;
+            }
+            return null;
         }
     }
 }
