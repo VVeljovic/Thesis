@@ -55,6 +55,7 @@ public class ReservationService : IReservationService
                 TotalAmount = reservationRequest.TotalAmount,
                 Status = "Pending",
                 AccommodationId = reservationRequest.AccommodationId,
+                UserId = reservationRequest.UserId
 
             };
             await _reservationContext.InsertReservationAsync(reservationEntity);
@@ -95,7 +96,7 @@ public class ReservationService : IReservationService
     }
 
 
-    async Task<IEnumerable<ReservationDto>> IReservationService.GetReservationsByUserId(string userId, int pageSize=5, int pageNumber=1, string status="Pending")
+    async Task<IEnumerable<ReservationDto>> IReservationService.GetReservationsByUserId(string userId, int pageSize=5, int pageNumber=1, string status="Success")
     {
         return await _reservationContext.GetReservationsByUserIdAsync(userId,pageSize,pageNumber,status);
     }

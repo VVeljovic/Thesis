@@ -19,4 +19,11 @@ public class ReservationController : ControllerBase
         await _mediator.Send(createReservationCommand);
         return Ok();
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetMyReservationsAsync([FromQuery]GetReservationsByUser getReservationsByUser)
+    {
+        var reservations = await _mediator.Send(getReservationsByUser);
+        return Ok(reservations);
+    }
 }

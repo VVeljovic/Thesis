@@ -10,6 +10,6 @@ public class GetReservationByUserHandler : IRequestHandler<GetReservationsByUser
     }
     async Task<IEnumerable<ReservationDto>> IRequestHandler<GetReservationsByUser, IEnumerable<ReservationDto>>.Handle(GetReservationsByUser request, CancellationToken cancellationToken)
     {
-         return await  _reservationService.GetReservationsByUserId(request.UserId);
+         return await  _reservationService.GetReservationsByUserId(request.UserId,request.PageSize,request.PageNumber,request.Status);
     }
 } 

@@ -47,14 +47,14 @@ public class ReservationContext
         return reservation;
 
     }
-    public async Task<IEnumerable<ReservationDto>> GetReservationsByUserIdAsync(string userId, int pageSize = 5, int pageNumber = 1,string status = "success")
+    public async Task<IEnumerable<ReservationDto>> GetReservationsByUserIdAsync(string userId, int pageSize = 5, int pageNumber = 1, string status = "Success")
     {
-        var filter = Builders<Reservation>.Filter.Eq(reservation =>reservation.UserId, userId);
-        var statusFilter = Builders<Reservation>.Filter.Eq(reservation=>reservation.Status, status);
-        filter = Builders<Reservation>.Filter.And(filter,statusFilter);
-        var reservations = await Reservations.Find(filter).Skip((pageNumber-1)*pageSize).Limit(pageSize).ToListAsync();
-        var reservationsDto = reservations.Select(reservation=>ReservationDto.MapReservationToDto(reservation));
-        return reservationsDto;  
+        var filter = Builders<Reservation>.Filter.Eq(reservation => reservation.UserId, userId);
+        var statusFilter = Builders<Reservation>.Filter.Eq(reservation => reservation.Status, status);
+        filter = Builders<Reservation>.Filter.And(filter, statusFilter);
+        var reservations = await Reservations.Find(filter).Skip((pageNumber - 1) * pageSize).Limit(pageSize).ToListAsync();
+        var reservationsDto = reservations.Select(reservation => ReservationDto.MapReservationToDto(reservation));
+        return reservationsDto;
     }
 
     public async Task UpdateReservationAsync(string reservationId, string newStatus)

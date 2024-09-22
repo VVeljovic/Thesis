@@ -169,7 +169,10 @@ html
     margin-bottom: -25px;
     letter-spacing: -0.5px
     }
-    
+    .booked {
+        color: red; /* Oboj tekst u crveno */
+        text-decoration: none; /* Ukloni podvučenost linka (opciono) */
+      }
     .container:nth-of-type(3) .right a {
     background-color: #f00;
     }
