@@ -45,7 +45,6 @@ public class ReservationContext
 
         var reservation = await Reservations.Find(filter).FirstOrDefaultAsync();
         return reservation;
-
     }
     public async Task<IEnumerable<ReservationDto>> GetReservationsByUserIdAsync(string userId, int pageSize = 5, int pageNumber = 1, string status = "Success")
     {

@@ -1,25 +1,24 @@
 <app-navbar></app-navbar>
+
 <body>
 	<div class="container" *ngFor="let reservation of reservations">
 		<section class="left">
-		  <!-- Prikaz Check-in datuma -->
-		  <p>{{ reservation.checkInDate | date: 'dd' }}</p>
-		  <p>{{ reservation.checkInDate | date: 'MMM' }}</p>
+			<!-- Prikaz Check-in datuma -->
+			<p>{{ reservation.checkInDate | date: 'dd' }}</p>
+			<p>{{ reservation.checkInDate | date: 'MMM' }}</p>
 		</section>
-		
+
 		<section class="right">
-		  <!-- Prikaz ID smeštaja i statusa rezervacije -->
-		 
-		  <h2> Status: {{ reservation.status }}</h2>
-		  <!-- Prikaz datuma u željenom formatu -->
-		  <p class="">
-			{{ reservation.checkInDate | date: 'EEEE, dd MMMM yyyy' }} to {{ reservation.checkOutDate | date: 'EEEE, dd MMMM yyyy' }}
-		  </p>
-		  <!-- Prikaz ukupnog iznosa i link za više informacija -->
-		  <p class=""> Total Amount: {{ reservation.totalAmount }} RSD</p>
-		  <a href="#" class="booked" style="color: red; text-decoration: none;">{{reservation.status}}</a>
+			<!-- Prikaz ID smeštaja i statusa rezervacije -->
+
+			<h2> Status: {{ reservation.status }}</h2>
+			<!-- Prikaz datuma u željenom formatu -->
+			<p class="">
+				{{ reservation.checkInDate | date: 'EEEE, dd MMMM yyyy' }} to {{ reservation.checkOutDate | date: 'EEEE,
+				dd MMMM yyyy' }}
+			</p>
+			<!-- Prikaz ukupnog iznosa i link za više informacija -->
+			<p class=""> Total Amount: {{ reservation.totalAmount }} RSD</p>
+			<a href="#" class="booked" style="color: red; text-decoration: none;">{{reservation.status}}</a>
 		</section>
-	  </div>
-
-		
-
+	</div>

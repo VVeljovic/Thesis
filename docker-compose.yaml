@@ -12,8 +12,6 @@ services:
       - "27017:27017"
     networks:
       - thesis
-    volumes:
-      - ./Accommodations.json:/docker-entrypoint-initdb.d/Accommodations.json:ro
   
   mongo-express:
     image: mongo-express:latest
@@ -27,8 +25,6 @@ services:
       ME_CONFIG_MONGODB_SERVER: mongo
     networks:
       - thesis
-
-
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     container_name: keycloak_container

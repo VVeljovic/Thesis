@@ -92,7 +92,6 @@ public class ReservationService : IReservationService
         await _reservationContext.UpdateReservationAsync(transactionResponse.ReservationId, transactionResponse.TransactionStatus);
         transactionResponse.TransactionStatus = "Failed";
         await _producerForTransactionResponse.PublishMessageAsync(transactionResponse, "reservation_failed");
-
     }
 
 
